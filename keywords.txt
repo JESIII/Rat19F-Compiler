@@ -1,0 +1,13 @@
+function
+if
+fi
+while
+return
+get
+put
+otherwise
+real
+int
+boolean
+true
+false
