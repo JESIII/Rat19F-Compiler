@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
 using namespace std;
 
 int main()
@@ -20,54 +19,55 @@ int main()
 	while (rat.get(single)) {
 		cout << single;
 		buffer[i] = single;
-		for (string j : seperators) {
-			for (string k : operators) {
-				for (string l : keywords) {
-					if (buffer.substr(0,i) == j) {
-						icg.write(buffer.c_str(), i);
+		for (string sep : seperators) {
+			for (string op : operators) {
+				for (string key : keywords) {
+					if (buffer.substr(0,i) == sep) {
+						icg << substr(0, i);
 						icg << endl;
 						i = 0;
 						buffer.clear();
 					}
-					else if (buffer.substr(0, i) == k){
+					else if (buffer.substr(0, i) == op){
 						buffer[i + 1] = rat.get();
-						if (buffer.substr(0, i+1) == "==") {
-							icg.write(buffer.c_str(), i+1);
+						if (buffer.substr(0, i + 1) == "==") {
+							icg << buffer.substr(0, i + 1);
 							icg << endl;
 						}
 						else if (buffer.substr(0, i + 1) == "<=") {
-							icg.write(buffer.c_str(), i + 1);
+							icg << buffer.substr(0, i + 1);
 							icg << endl;
 						}
 						else if (buffer.substr(0, i + 1) == ">=") {
-							icg.write(buffer.c_str(), i + 1);
+							icg << buffer.substr(0, i + 1);
 							icg << endl;
 						}
 						else if (buffer.substr(0, i + 1) == "!=") {
-							icg.write(buffer.c_str(), i + 1);
+							icg << buffer.substr(0, i + 1);
 							icg << endl;
 						}
 						else if (buffer.substr(0, i + 1) == "/=") {
-							icg.write(buffer.c_str(), i + 1);
+							icg << buffer.substr(0, i + 1);
 							icg << endl;
 						}
 						else {
 							rat.unget();
-							icg.write(buffer.c_str(), i);
+							icg << buffer.substr(0, i);
 							icg << endl;
 						}
 						i = 0;
 						buffer.clear();
 					}
-					else if (buffer.substr(0, i) == l || rat.get() == ' ') {
-						icg.write(buffer.c_str(), i);
+					else if (buffer.substr(0, i) == key) {
+						icg << buffer.substr(0, i);
 						icg << endl;
 						i = 0;
 						buffer.clear();
 					}
-					i++;
+
 				}
 			}
 		}
 	}
 }
+//NEED TO INCRREMENT i
