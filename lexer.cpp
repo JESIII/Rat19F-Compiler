@@ -1,72 +1,103 @@
+//John Scales
+//323 Project 1
+//Lexical analyzer
+
 #include <iostream>
 #include <fstream>
 using namespace std;
+fstream rat, icg;
+char c;
+string buff;
+string seperators[] = { "%%", ")", "(", ";", "{", "}", "[*", "*]","," };
+string operators[] = { "+", "-", "/", "*", "=", "==", "<=", ">=", "!=", "/=", "<", ">" };
+string keywords[] = { "real", "int", "function", "if", "fi",
+"while", "return", "get", "put", "otherwise", "boolean", "true", "false" };
+
+void FSMid(){
+	bool keyfound = false;
+	int i = 1;
+	while (isalpha(c) || isdigit(c) || c == '_'){
+		rat.get(c);
+		buff[i] = c;
+		i++;
+	}
+	for (string key : keywords){
+		if (buff.substr(0,i) == key){
+			cout << buff.substr(0,i) << "	Keyword" << endl;
+			keyfound = true;
+			rat.putback(c);
+		}
+	}
+	if (!keyfound){
+		cout << buff.substr(0,i) << "	Identifier" << endl;
+		rat.putback(c);
+	}
+}
+
+void FSMintreal(){
+	int i = 1;
+	while (isdigit(c)){
+		rat.get(c);
+		buff[i] = c;
+		i++;
+	}
+	if (c == '.'){
+		do{
+			rat.get(c);
+			i++;
+			buff[i] = c;
+		} while (isdigit(c));
+		cout << buff.substr(0,i) << "	Real" << endl;
+		rat.putback(c);
+	}
+	else if (!isdigit(c) && c != '.'){
+		cout << buff.substr(0,i) << "	Integer" << endl;
+		rat.putback(c);
+	}
+}
 
 int main()
 {
-	fstream rat, icg;
 	rat.open("C:/Users/tinco/Dropbox (CSU Fullerton)/323/Project 1/sample.rat19");
-	if (rat.is_open()) cout << "source code open.";
+	if (rat.is_open()) cout << "source code open.\n";
 	icg.open("C:/Users/tinco/Dropbox (CSU Fullerton)/323/Project 1/icg.rat19");
-	if (icg.is_open()) cout << "file to write open.";
-	string seperators[] = { "%%", ")", "(", ";", "{", "}", "[*", "*]","," };
-	string operators[] = { "+", "-", "/", "*", "=", "==", "<=", ">=", "!=", "/=", "<", ">" };
-	string keywords[] = { "real", "int", "function", "if", "fi",
-	"while", "return", "get", "put", "otherwise", "boolean", "true", "false" };
-	char single;
-	string buffer;
-	int i = 0;
-	while (rat.get(single)) {
-		cout << single;
-		buffer[i] = single;
-		for (string sep : seperators) {
-			for (string op : operators) {
-				for (string key : keywords) {
-					if (buffer.substr(0,i) == sep) {
-						icg << substr(0, i);
-						icg << endl;
-						i = 0;
-						buffer.clear();
-					}
-					else if (buffer.substr(0, i) == op){
-						buffer[i + 1] = rat.get();
-						if (buffer.substr(0, i + 1) == "==") {
-							icg << buffer.substr(0, i + 1);
-							icg << endl;
-						}
-						else if (buffer.substr(0, i + 1) == "<=") {
-							icg << buffer.substr(0, i + 1);
-							icg << endl;
-						}
-						else if (buffer.substr(0, i + 1) == ">=") {
-							icg << buffer.substr(0, i + 1);
-							icg << endl;
-						}
-						else if (buffer.substr(0, i + 1) == "!=") {
-							icg << buffer.substr(0, i + 1);
-							icg << endl;
-						}
-						else if (buffer.substr(0, i + 1) == "/=") {
-							icg << buffer.substr(0, i + 1);
-							icg << endl;
-						}
-						else {
-							rat.unget();
-							icg << buffer.substr(0, i);
-							icg << endl;
-						}
-						i = 0;
-						buffer.clear();
-					}
-					else if (buffer.substr(0, i) == key) {
-						icg << buffer.substr(0, i);
-						icg << endl;
-						i = 0;
-						buffer.clear();
-					}
-
+	if (icg.is_open()) cout << "file to write open.\n";
+	string test = "testing123";
+	cout << test.substr(0, 4) << endl;
+	while(rat.get(c)){
+		buff[0] = c;
+		for (string op : operators){
+			if (buff.substr(0,1) == op){
+				rat.get(c);
+				buff[1] = c;
+				if (buff.substr(0,2) == op){
+					cout << buff.substr(0,2) << "	Operator" << endl;
+				}
+				else{
+					cout << buff.substr(0,1) << "	Operator" << endl;
+					rat.putback(c);
 				}
 			}
+		}
+		for (string sep : seperators){
+			if (buff.substr(0,1) == sep){
+				rat.get(c);
+				buff[1] = c;
+				if (buff.substr(0,2) == sep){
+					cout << buff.substr(0,2) << "	Seperator" << endl;
+					rat.putback(c);
+				}
+				else {
+					cout << buff[0] << "	Seperator" << endl;
+					rat.putback(c);
+				}
+			}
+		}
+		if (isalpha(c)){
+			FSMid();
+		}
+		if (isdigit(c)){
+			FSMintreal();
 		}
 	}
 }
