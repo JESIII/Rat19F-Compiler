@@ -1,0 +1,65 @@
+divides separators and operators into a few categories for parsing-
+- requiring disambiguation (one- or two-char seps/ops with matching first characters)
+- easily-matched one-char seps/ops
+- two-char seps/ops requiring an additional check of the next char in line
+-- if check for second char matches remember to rat.get() to properly advance the file parse; if not matched it should not be advanced (same as doing a second get() instead of peek() then using unget() but a bit cleaner?)
+
+
+char disambig[] = {"*","<",">","/","="};
+
+char onec_seps[] = {"(",")",";","{","}", ","};
+char twoc_seps_ch1[] = {"%","["};
+
+char onec_ops[] = {"+","-"};
+char twoc_ops_ch1[] = {"!"};
+
+
+for (char chep : disambig)
+ if (c == chep) {
+  //send c + rat.peek() to switch statement function to check the pastabilities
+  }
+
+for (char chep : onec_seps)
+ if (c == chep) {
+  //it's a one char separator and that's all, cool
+  }
+
+for (char chep : twoc_seps_ch1)
+ if (c == chep) {
+  //check next char for match
+  }
+
+for (char chep : onec_ops)
+ if (c == chep) {
+  //it's a one char operator and that's all
+  }
+
+for (char chep : twoc_ops_ch1)
+ if (c == chep) {
+  //check rat.peek()
+  }
+
+
+
+
+two ch seps check
+switch (c):
+case '%': check peek == '%'
+case '[': check '*', if matched enter comment mode
+
+two ch ops check (could be combined w/ above)
+-just '!', so just match '='
+
+
+char disambig[] = {"*","<",">","/","="};
+
+disambig
+switch (c):
+*: check ]; might be uneccesary since *] should only be at the end of comments...
+
+<: if peek() == '=' is op "<=" (string)
+else is op '<' (if peek is valid/whitespace)
+
+>: check =
+/: check =
+=: check =
