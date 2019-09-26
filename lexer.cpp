@@ -12,7 +12,12 @@ string seperators[] = { "%%", ")", "(", ";", "{", "}", "[*", "*]","," };
 string operators[] = { "+", "-", "/", "*", "=", "==", "<=", ">=", "!=", "/=", "<", ">" };
 string keywords[] = { "real", "int", "function", "if", "fi",
 "while", "return", "get", "put", "otherwise", "boolean", "true", "false" };
+void FSMsep(){
 
+}
+void FSMop(){
+
+}
 void FSMid(){
 	bool keyfound = false;
 	int i = 1;
