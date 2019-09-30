@@ -71,6 +71,7 @@ int main()
 	cout << test.substr(0, 4) << endl;
 	while(rat.get(c)){
 		buff[0] = c;
+
 		for (string op : operators){
 			if (buff.substr(0,1) == op){
 				rat.get(c);
