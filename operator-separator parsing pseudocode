@@ -44,17 +44,14 @@ for (char chep : twoc_ops_ch1)
 
 two ch seps check
 switch (c):
-case '%': check peek == '%'
+case '%': if rat.peek() == '%' {sep}
 case '[': check '*', if matched enter comment mode
 
 two ch ops check (could be combined w/ above)
 -just '!', so just match '='
 
 
-char disambig[] = {"*","<",">","/","="};
-
 disambig
-switch (c):
 *: check ]; might be uneccesary since *] should only be at the end of comments...
 
 <: if peek() == '=' is op "<=" (string)
@@ -63,3 +60,12 @@ else is op '<' (if peek is valid/whitespace)
 >: check =
 /: check =
 =: check =
+these are all the same second char, so combine
+
+if (c=='<'|c=='>'|c=='='|c=='/')
+//luckily they're all ops whether one char or two
+{
+if (rat.peek() == '=')
+ { //return c + '=' as op }
+else//if next char is valid
+ { //return c as op }
