@@ -14,19 +14,58 @@ char onec_ops[] = {"+","-"};
 char twoc_ops_ch1[] = {"!"};
 
 
+void FSMdisambig(){
+//*: check for ]; might be uneccesary since *] should only be at the end of comments...
+
+if (c=='<'|c=='>'|c=='='|c=='/')
+//luckily they're all ops whether one char or two
+{
+if (rat.peek() == '=')
+ { //return c + '=' as op
+  cout << c << rat.get() << "   Operator\n"; }
+else//if next char is valid
+ { //return c as op
+   cout << c << rat.get() << "   Operator\n"; }
+}//if
+}
+
+
+//two char separators/operators check
+void FSMtwochsep(){
+switch (c){
+ case '%': if (rat.peek() == '%') {
+  cout << c << rat.get() << "   Separator\n";}
+  break;
+ case '[': if (rat.peek() == '*') {
+  cout << c << rat.get() << "   Separator COM\n";}
+  break;
+ case '!': if (rat.peek() == '=') {
+  cout << c << rat.get() << "    Operator\n";}
+}//sw
+}
+
+
+
+
+
 for (char chep : disambig)
  if (c == chep) {
-  //send c + rat.peek() to switch statement function to check the pastabilities
-  }
-
-for (char chep : onec_seps)
- if (c == chep) {
-  //it's a one char separator and that's all, cool
+  FSMdisambig();
   }
 
 for (char chep : twoc_seps_ch1)
  if (c == chep) {
-  //check next char for match
+  FSMtwochsep();
+  }
+for (char chep : twoc_ops_ch1)
+ if (c == chep) {
+  FSMtwochsep();
+  }
+
+
+for (char chep : onec_seps)
+ if (c == chep) {
+  //it's a one char separator and that's all, cool
   }
 
 for (char chep : onec_ops)
@@ -34,38 +73,3 @@ for (char chep : onec_ops)
   //it's a one char operator and that's all
   }
 
-for (char chep : twoc_ops_ch1)
- if (c == chep) {
-  //check rat.peek()
-  }
-
-
-
-
-two ch seps check
-switch (c):
-case '%': if rat.peek() == '%' {sep}
-case '[': check '*', if matched enter comment mode
-
-two ch ops check (could be combined w/ above)
--just '!', so just match '='
-
-
-disambig
-*: check ]; might be uneccesary since *] should only be at the end of comments...
-
-<: if peek() == '=' is op "<=" (string)
-else is op '<' (if peek is valid/whitespace)
-
->: check =
-/: check =
-=: check =
-these are all the same second char, so combine
-
-if (c=='<'|c=='>'|c=='='|c=='/')
-//luckily they're all ops whether one char or two
-{
-if (rat.peek() == '=')
- { //return c + '=' as op }
-else//if next char is valid
- { //return c as op }
