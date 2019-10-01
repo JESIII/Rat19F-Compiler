@@ -66,10 +66,11 @@ for (char chep : twoc_ops_ch1)
 for (char chep : onec_seps)
  if (c == chep) {
   //it's a one char separator and that's all, cool
+  cout << c << "   Separator\n";
   }
 
 for (char chep : onec_ops)
  if (c == chep) {
-  //it's a one char operator and that's all
+  cout << c << "   Operator\n";
   }
 
