@@ -5,6 +5,7 @@
 #include <string>
 
 using namespace std;
+ifstream fin("C:/Users/tinco/Dropbox (CSU Fullerton)/323/Project 1/sample.rat19");
 
 bool in_array(char key, char buffer[]) {
 	for (int i = 0; i < sizeof(buffer) / 4; i++) {
@@ -13,6 +14,13 @@ bool in_array(char key, char buffer[]) {
 		}
 	}
 	return false;
+}
+//TODO: (Connects to TODO near bottom of main)
+int isIntReal(char buffer[]) {
+	int i, flag = 0;
+	flag = isdigit(fin.peek()) ? 1 : 0;
+	flag = fin.peek() == '.' ? 2 : 0;
+	return flag;
 }
 
 int isKeyword(char buffer[]) {
@@ -26,7 +34,6 @@ int isKeyword(char buffer[]) {
 			break;
 		}
 	}
-
 	return flag;
 }
 int isOperator(char buffer[]) {
@@ -46,7 +53,7 @@ int isOperator(char buffer[]) {
 int isSeperator(char buffer[]) {
 	char seperators[9] = { '%', ')', '(', ';', '{', '}', '[', ',', ']' };
 	int i, flag = 0;
-	for (i = 0; i < 9; ++i) {
+	for (i = 0; i < 9; i++) {
 		if (in_array(seperators[i], buffer)) {
 			flag = seperators[i] == '%' ? 2 : 1;
 			flag = seperators[i] == '*' ? 3 : 1;
@@ -56,25 +63,9 @@ int isSeperator(char buffer[]) {
 	}
 	return flag;
 }
-/*
-int isIntReal(char buffer[]) {
-
-	int i, flag = 0;
-
-	for (i = 0; i < 32; ++i) {
-		if (strcmp(keywords[i], buffer) == 0) {
-			flag = 1;
-			break;
-		}
-	}
-
-	return flag;
-}
-*/
 
 int main() {
 	char ch, buffer[20];
-	ifstream fin("C:/Users/tinco/Dropbox (CSU Fullerton)/323/Project 1/sample.rat19");
 	int i, j = 0;
 
 	if (!fin.is_open()) {
@@ -147,13 +138,16 @@ int main() {
 				}
 			}
 		}
+		//TODO:
+		if (isdigit(ch)) {
+
+		}
 		if (isalnum(ch)) {
 			buffer[j++] = ch;
 		}
 		else if ((ch == ' ' || ch == '\n') && (j != 0)) {
 			buffer[j] = '\0';
 			j = 0;
-
 			if (isKeyword(buffer) == 1)
 				cout << buffer << " is keyword\n";
 			else
