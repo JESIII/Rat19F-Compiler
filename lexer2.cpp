@@ -32,27 +32,28 @@ int isKeyword(char buffer[]) {
 int isOperator(char buffer[]) {
 	char operators[8] = { '+', '-', '/', '*', '=', '<', '>', '!' };
 	int i, flag = 0;
-
 	for (i = 0; i < 8; ++i) {
 		if (in_array(operators[i],buffer)) {
 			flag = operators[i] == '=' ? 2 : 1;
+			flag = operators[i] == '<' ? 3 : 1;
+			flag = operators[i] == '>' ? 4 : 1;
+			flag = operators[i] == '!' ? 5 : 1;
 			break;
 		}
 	}
-
 	return flag;
 }
 int isSeperator(char buffer[]) {
-	char seperators[9][10] = { "%%","[*", "*]" };
+	char seperators[9] = { '%', ')', '(', ';', '{', '}', '[', ',', ']' };
 	int i, flag = 0;
-
 	for (i = 0; i < 9; ++i) {
-		if (strcmp(seperators[i], buffer) == 0) {
-			flag = 1;
+		if (in_array(seperators[i], buffer)) {
+			flag = seperators[i] == '%' ? 2 : 1;
+			flag = seperators[i] == '*' ? 3 : 1;
+			flag = seperators[i] == '[' ? 4 : 1;
 			break;
 		}
 	}
-
 	return flag;
 }
 /*
@@ -83,15 +84,43 @@ int main() {
 	while (!fin.eof()) {
 		ch = fin.get();
 		char operators[8]= { '+', '-', '/', '*', '=', '<', '>', '!' };
-		char seperators[9] = { '%', ')', '(', ';', '{', '}', '[', ',' };
+		char seperators[9] = { '%', ')', '(', ';', '{', '}', '[', ',', ']' };
 		bool foundsep = false;
 		for (i = 0; i < 9; ++i) {
 			if (ch == seperators[i]) {
 				buffer[j] = ch;
-				if (isSeperator(buffer) == 1) {
+				int temp = isSeperator(buffer);
+				if (temp == 1) {
 					buffer[++j] = '\0';
 					cout << buffer << " is seperator\n";
 					j = 0;
+				}
+				else if (temp == 2) {
+					char next = fin.peek();
+					if (next == '%') {
+						buffer[++j] = fin.get();
+						buffer[++j] = '\0';
+						cout << buffer << " is seperator\n";
+						j = 0;
+					}
+				}
+				else if (temp == 3) {
+					char next = fin.peek();
+					if (next == ']') {
+						buffer[++j] = fin.get();
+						buffer[++j] = '\0';
+						cout << buffer << " is seperator\n";
+						j = 0;
+					}
+				}
+				else if (temp == 4) {
+					char next = fin.peek();
+					if (next == '*') {
+						buffer[++j] = fin.get();
+						buffer[++j] = '\0';
+						cout << buffer << " is seperator\n";
+						j = 0;
+					}
 				}
 				else {
 					cout << ch << " is seperator\n";
@@ -100,16 +129,11 @@ int main() {
 			}
 		}
 
-		for (i = 0; i < 12; ++i) {
+		for (i = 0; i < 8; ++i) {
 			if (ch == operators[i] && foundsep == false) {
 				buffer[j] = ch;
 				int temp = isOperator(buffer);
-				if (temp == 1) {
-					buffer[++j] = '\0';
-					cout << buffer << " is operator\n";
-					j = 0;
-				}
-				else if (temp == 2) {
+				if (temp > 0 ) {
 					char next = fin.peek();
 					if (next == '=') {
 						buffer[++j] = fin.get();

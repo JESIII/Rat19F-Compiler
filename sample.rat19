@@ -8,6 +8,7 @@ function convert1x (fahr int)
 int low, high, step; [*declarations*]
 get(low, high, step);
 while(low == high){
+=> <= != [* *]
 put(low);
 put(convert1x(low));
 low = low + step;
