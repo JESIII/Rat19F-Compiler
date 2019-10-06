@@ -5,7 +5,7 @@
 #include <string>
 
 using namespace std;
-ifstream fin("../sample.rat19");
+ifstream fin("C:/Users/tinco/Dropbox (CSU Fullerton)/323/Project 1/sample.rat19");
 
 //=========================================================================
 // Function to check if a key value matches a value in an array
