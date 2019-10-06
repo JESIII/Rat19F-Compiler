@@ -32,9 +32,9 @@ string getNumOrReal(char number) {
 	//====================================================================
 	int finiteStateMachine[4][3] = { 
 				/*Initial State 0*/	 {1, 3, 3},
-				/*State 1*/			 {1, 2, 3},
-				/*State 2*/			 {2, 3, 3},
-				/*State 3*/			 {3, 3, 3}
+				/*State 1*/		 {1, 2, 3},
+				/*State 2*/		 {2, 3, 3},
+				/*State 3*/		 {3, 3, 3}
 									};
 
 
