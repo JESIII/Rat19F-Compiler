@@ -1,5 +1,6 @@
 [* This is comment for this sample code which
 converts Fahrenheit into celcius *]
+test_macine
 function convert1x (fahr int)
 {
 	return 5 * (fahr-32)/9;
@@ -8,9 +9,15 @@ function convert1x (fahr int)
 int low, high, step; [*declarations*]
 get(low, high, step);
 while(low == high){
-=> <= != [* *]
+>= <= != [* *]
+1.23
 put(low);
 put(convert1x(low));
 low = low + step;
 }
+for ( i in array ){
+ put(high);
+}
+float green123_machine = 456.2490;
 %%
+

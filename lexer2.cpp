@@ -1,72 +1,93 @@
-#include<iostream>
-#include<fstream>
-#include<stdlib.h>
-#include<ctype.h>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include <string>
+#include <string.h>
 
 using namespace std;
-ifstream fin("C:/Users/tinco/Dropbox (CSU Fullerton)/323/Project 1/sample.rat19");
-
-bool in_array(char key, char buffer[]) {
-	for (int i = 0; i < sizeof(buffer) / 4; i++) {
-		if (key == buffer[i]) {
+ifstream fin("./sample.rat19");
+ofstream fout("./output.txt");
+//=========================================================================
+// Function to check if a key value matches a value in an array
+//=========================================================================
+bool in_array(char key, char* arr, int size) {
+	for (int i = 0; i < size; i++) {
+		if (key == arr[i]) {
 			return true;
 		}
 	}
 	return false;
 }
-//TODO: (Connects to TODO near bottom of main)
-int isIntReal(char buffer[]) {
-	int i, flag = 0;
-	flag = isdigit(fin.peek()) ? 1 : 0;
-	flag = fin.peek() == '.' ? 2 : 0;
-	return flag;
+//=========================================================================a
+// Function to check if a number is an integer or a real number
+//=========================================================================
+string getNumOrReal(char number) {
+
+	//====================================================================
+	//Finite state machine that can tell if int or real number or invalid
+	// States:
+	//		1 - Integer
+	//		2 - Real
+	//		3 - Invalid
+	//====================================================================
+	int finiteStateMachine[4][3] = {
+				/*Initial State 0*/	 {1, 3, 3},
+				/*State 1*/		 {1, 2, 3},
+				/*State 2*/		 {2, 3, 3},
+				/*State 3*/		 {3, 3, 3}
+									};
+
+
+	//====================================================================
+	// Pointer keeping track of position in finite state machine
+	// Starts at State 1 because we already know the first char is a number
+	//====================================================================
+	int position = 1;
+
+	char buf[100];
+	buf[0] = number;
+	int index = 1;
+
+	char nextChar;
+	while (nextChar = fin.peek()) {
+		if (isdigit(nextChar)) {
+			position = finiteStateMachine[position][0];
+		}
+		else if (nextChar == '.') {
+			position = finiteStateMachine[position][1];
+		}
+		else {
+			position = finiteStateMachine[position][2];
+		}
+
+		if (position == 3) {
+			buf[index] = '\0';
+			break;
+		}
+		else {
+			buf[index++] = nextChar;
+		}
+		fin.get();
+	}
+	return buf;
 }
 
-int isKeyword(char buffer[]) {
-	char keywords[32][10] = { "real", "int", "function", "if", "fi",
-"while", "return", "get", "put", "otherwise", "boolean", "true", "false" };
+string isKeyword(char buffer[]) {
+	string keywords[14] = { "real", "int", "function", "if", "fi", "for", "while", "return", "get", "put", "otherwise", "boolean", "true", "false" };
 	int i, flag = 0;
 
-	for (i = 0; i < 32; ++i) {
-		if (strcmp(keywords[i], buffer) == 0) {
-			flag = 1;
-			break;
+	for (i = 0; i < 14; ++i) {
+		if (strcmp(keywords[i].c_str(), buffer) == 0) {
+			return keywords[i];
 		}
 	}
-	return flag;
-}
-int isOperator(char buffer[]) {
-	char operators[8] = { '+', '-', '/', '*', '=', '<', '>', '!' };
-	int i, flag = 0;
-	for (i = 0; i < 8; ++i) {
-		if (in_array(operators[i],buffer)) {
-			flag = operators[i] == '=' ? 2 : 1;
-			flag = operators[i] == '<' ? 3 : 1;
-			flag = operators[i] == '>' ? 4 : 1;
-			flag = operators[i] == '!' ? 5 : 1;
-			break;
-		}
-	}
-	return flag;
-}
-int isSeperator(char buffer[]) {
-	char seperators[9] = { '%', ')', '(', ';', '{', '}', '[', ',', ']' };
-	int i, flag = 0;
-	for (i = 0; i < 9; i++) {
-		if (in_array(seperators[i], buffer)) {
-			flag = seperators[i] == '%' ? 2 : 1;
-			flag = seperators[i] == '*' ? 3 : 1;
-			flag = seperators[i] == '[' ? 4 : 1;
-			break;
-		}
-	}
-	return flag;
+	return "-1";
 }
 
 int main() {
-	char ch, buffer[20];
-	int i, j = 0;
+	char ch;
 
 	if (!fin.is_open()) {
 		cout << "error while opening the file\n";
@@ -75,87 +96,90 @@ int main() {
 	while (!fin.eof()) {
 		ch = fin.get();
 		char operators[8]= { '+', '-', '/', '*', '=', '<', '>', '!' };
-		char seperators[9] = { '%', ')', '(', ';', '{', '}', '[', ',', ']' };
-		bool foundsep = false;
-		for (i = 0; i < 9; ++i) {
-			if (ch == seperators[i]) {
-				buffer[j] = ch;
-				int temp = isSeperator(buffer);
-				if (temp == 1) {
-					buffer[++j] = '\0';
-					cout << buffer << " is seperator\n";
-					j = 0;
-				}
-				else if (temp == 2) {
-					char next = fin.peek();
-					if (next == '%') {
-						buffer[++j] = fin.get();
-						buffer[++j] = '\0';
-						cout << buffer << " is seperator\n";
-						j = 0;
-					}
-				}
-				else if (temp == 3) {
-					char next = fin.peek();
-					if (next == ']') {
-						buffer[++j] = fin.get();
-						buffer[++j] = '\0';
-						cout << buffer << " is seperator\n";
-						j = 0;
-					}
-				}
-				else if (temp == 4) {
-					char next = fin.peek();
-					if (next == '*') {
-						buffer[++j] = fin.get();
-						buffer[++j] = '\0';
-						cout << buffer << " is seperator\n";
-						j = 0;
-					}
-				}
-				else {
-					cout << ch << " is seperator\n";
-				}
-				foundsep = true;
+		char seperators[10] = { '%', ')', '(', ';', '{', '}', '[', ',', ']', '*' };
+
+		if (isalpha(ch)) {
+			int finiteStateMachine[4][3] = {
+						/*Initial State 0*/{1, 3, 3},
+						/*State 1 id*/		   {1, 2, 3},
+						/*State 2 key*/		   {2, 3, 3},
+						/*State 3 inv*/		   {3, 3, 3}
+			};
+			int index = 0;
+			char identifier[100];
+			identifier[0] = ch;
+			char next = fin.peek();
+			while (isalnum(next) || next == '_') {
+				index++;
+				identifier[index] = next;
+				fin.get();
+				next = fin.peek();
+			}
+			identifier[++index] = '\0';
+			string keyword = isKeyword(identifier);
+			if (keyword != "-1") {
+				cout << keyword << " is a keyword\n";
+				fout << keyword << " is a keyword\n";
+			}
+			else {
+				cout << identifier << " is an identifier\n";
+				fout << identifier << " is an identifier\n";
 			}
 		}
 
-		for (i = 0; i < 8; ++i) {
-			if (ch == operators[i] && foundsep == false) {
-				buffer[j] = ch;
-				int temp = isOperator(buffer);
-				if (temp > 0 ) {
-					char next = fin.peek();
-					if (next == '=') {
-						buffer[++j] = fin.get();
-						buffer[++j] = '\0';
-						cout << buffer << " is operator\n";
-						j = 0;
-					}
-				}
-				else {
-					cout << ch << " is operator\n";
-				}
+		else if (isdigit(ch)) {
+			string number = getNumOrReal(ch);
+			if (number.find(".") != -1) {
+				cout << number << " is a real number\n";
+				fout << number << " is a real number\n";
+			}
+			else {
+				cout << number << " is an integer\n";
+				fout << number << " is an integer\n";
 			}
 		}
-		//TODO:
-		if (isdigit(ch)) {
 
-		}
-		if (isalnum(ch)) {
-			buffer[j++] = ch;
-		}
-		else if ((ch == ' ' || ch == '\n') && (j != 0)) {
-			buffer[j] = '\0';
-			j = 0;
-			if (isKeyword(buffer) == 1)
-				cout << buffer << " is keyword\n";
-			else
-				cout << buffer << " is indentifier\n";
+		else if (in_array(ch, seperators, 10)) {
+			char next = fin.peek();
+			if (next == '%') {
+				cout << ch << next << " is a seperator\n";
+				fout << ch << next << " is a seperator\n";
+				fin.get();
+			}
+			else if (next == ']') { //handles *]
+				cout << ch << next << " is a seperator\n";
+				fout << ch << next << " is a seperator\n";
+				fin.get();
+			}
+			else if (next == '*') { //handles [*
+				cout << ch << next << " is a seperator\n";
+				fout << ch << next << " is a seperator\n";
+				fin.get();
+			}
+			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
+				cout << ch << " is an operator\n";
+				fout << ch << " is an operator\n";
+			}
+			else {
+				cout << ch << " is a seperator\n";
+				fout << ch << " is a seperator\n";
+			}
 		}
 
+		else if (in_array(ch, operators, 8)) {
+			char next = fin.peek();
+			if (next == '=') {
+				cout << ch << next << " is an operator\n";
+				fout << ch << next << " is an operator\n";
+				fin.get();
+			}
+			else {
+				cout << ch << " is an operator\n";
+				fout << ch << " is an operator\n";
+			}
+		}
 	}
-
+	fout.close();
 	fin.close();
 
 	return 0;
