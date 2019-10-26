@@ -1,0 +1,83 @@
+move this to the .h file when done
+
+
+idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int (&fsm)[4][3]){
+//replace all "is a foobah" w/ return values, cout/fout will be handled in main
+
+		if (isalpha(ch)) {
+			int index = 0;
+			char identifier[100];
+			identifier[0] = ch;
+			char next = fin.peek();
+			while (isalnum(next) || next == '_') {
+				index++;
+				identifier[index] = next;
+				fin.get();
+				next = fin.peek();
+			}
+			identifier[++index] = '\0';
+			string keyword = isKeyword(identifier);
+			if (keyword != "-1") {
+				//set st to keyword, return enum for keyword
+				st = keyword;//this works for ref strings right
+				return KY;
+			}
+			else {
+				cout << identifier << " is an identifier\n";
+				fout << identifier << " is an identifier\n";
+				return ID;
+			}
+		}//if ch
+
+		else if (isdigit(ch)) {
+			string number = getNumOrReal(ch);
+			if (number.find(".") != -1) {
+				cout << number << " is a real number\n";
+				return RL;
+			}
+			else {
+				cout << number << " is an integer\n";
+				return IN;
+			}
+		}//else ch
+
+		else if (in_array(ch, seperators, 10)) {
+			char next = fin.peek();
+			if (next == '%') {
+				cout << ch << next << " is a seperator\n";
+				fin.get();
+				return SEP;
+			}
+			else if (next == ']') { //handles *]
+				cout << ch << next << " is a seperator\n";
+				fin.get();
+				return SEP;
+			}
+			else if (next == '*') { //handles [*
+				cout << ch << next << " is a seperator\n";
+				fin.get();
+				return SEP;
+			}
+			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
+				cout << ch << " is an operator\n";
+				return OP;
+			}
+			else {
+				cout << ch << " is a seperator\n";
+				return SEP;
+			}
+		}//e
+
+		else if (in_array(ch, operators, 8)) {
+			char next = fin.peek();
+			if (next == '=') {
+				cout << ch << next << " is an operator\n";
+				fout << ch << next << " is an operator\n";
+				fin.get();
+				return OP;
+			}
+			else {
+				cout << ch << " is an operator\n";
+				return OP;
+			}
+		}
