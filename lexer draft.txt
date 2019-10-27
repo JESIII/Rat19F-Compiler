@@ -23,8 +23,7 @@ idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int
 				return KY;
 			}
 			else {
-				cout << identifier << " is an identifier\n";
-				fout << identifier << " is an identifier\n";
+				st = keyword;
 				return ID;
 			}
 		}//if ch
@@ -32,11 +31,11 @@ idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int
 		else if (isdigit(ch)) {
 			string number = getNumOrReal(ch);
 			if (number.find(".") != -1) {
-				cout << number << " is a real number\n";
+				st = keyword;
 				return RL;
 			}
 			else {
-				cout << number << " is an integer\n";
+				st = keyword;
 				return IN;
 			}
 		}//else ch
@@ -44,26 +43,26 @@ idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int
 		else if (in_array(ch, seperators, 10)) {
 			char next = fin.peek();
 			if (next == '%') {
-				cout << ch << next << " is a seperator\n";
+				st = keyword;
 				fin.get();
 				return SEP;
 			}
 			else if (next == ']') { //handles *]
-				cout << ch << next << " is a seperator\n";
+				st = keyword;
 				fin.get();
 				return SEP;
 			}
 			else if (next == '*') { //handles [*
-				cout << ch << next << " is a seperator\n";
+				st = keyword;
 				fin.get();
 				return SEP;
 			}
 			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
-				cout << ch << " is an operator\n";
+				st = keyword;
 				return OP;
 			}
 			else {
-				cout << ch << " is a seperator\n";
+				st = keyword;
 				return SEP;
 			}
 		}//e
@@ -71,13 +70,12 @@ idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int
 		else if (in_array(ch, operators, 8)) {
 			char next = fin.peek();
 			if (next == '=') {
-				cout << ch << next << " is an operator\n";
-				fout << ch << next << " is an operator\n";
+				st = keyword;
 				fin.get();
 				return OP;
 			}
 			else {
-				cout << ch << " is an operator\n";
+				st = keyword;
 				return OP;
 			}
 		}
