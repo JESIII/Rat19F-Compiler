@@ -7,7 +7,7 @@
 #include <string.h>
 
 using namespace std;
-ifstream fin("./sample.rat19");
+ifstream fin("./Test-Cases/sample.rat19");
 ofstream fout("./output.txt");
 //=========================================================================
 // Function to check if a key value matches a value in an array
