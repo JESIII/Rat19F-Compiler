@@ -95,7 +95,7 @@ int main() {
 	}
 	while (!fin.eof()) {
 		ch = fin.get();
-		char operators[8]= { '+', '-', '/', '*', '=', '<', '>', '!' };
+		char operators[8]= { '+', '-', '/', '*', '=', '<', '!' };
 		char seperators[10] = { '%', ')', '(', ';', '{', '}', '[', ',', ']', '*' };
 
 		if (isalpha(ch)) {
@@ -168,7 +168,12 @@ int main() {
 
 		else if (in_array(ch, operators, 8)) {
 			char next = fin.peek();
-			if (next == '=') {
+			if (next == '>') {
+				cout << ch << next << " is an operator\n";
+				fout << ch << next << " is an operator\n";
+				fin.get();
+			}
+			else if (next == '=') {
 				cout << ch << next << " is an operator\n";
 				fout << ch << next << " is an operator\n";
 				fin.get();

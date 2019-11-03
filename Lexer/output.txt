@@ -59,11 +59,12 @@ low is an identifier
 high is an identifier
 ) is a seperator
 { is a seperator
->= is an operator
+= is an operator
 <= is an operator
 != is an operator
 [* is a seperator
 *] is a seperator
+=> is an operator
 1.23 is a real number
 put is a keyword
 ( is a seperator
