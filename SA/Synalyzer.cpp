@@ -102,7 +102,7 @@ void CC(){
 }
 int main(){
   A();
-  if (l == '$'){
+  if (l == '$'){ //l will be the token being worked on.
     printf("Parsing Successful");
   }
 }
