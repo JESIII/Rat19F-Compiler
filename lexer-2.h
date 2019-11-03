@@ -85,7 +85,7 @@ string isKeyword(char buffer[]) {
 	return "-1";
 }
 
-idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int (&fsm)[4][3]){
+int chew(ifstream& fin, char ch, string &st, int (&operators)[8], int (&seperators)[10], int (&fsm)[4][3]){
 //replace all "is a foobah" w/ return values, cout/fout will be handled in main
 
 		if (isalpha(ch)) {
@@ -115,11 +115,11 @@ idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int
 		else if (isdigit(ch)) {
 			string number = getNumOrReal(ch);
 			if (number.find(".") != -1) {
-				st = keyword;
+				//st = keyword;
 				return RL;
 			}
 			else {
-				st = keyword;
+				//st = keyword;
 				return IN;
 			}
 		}//else ch
@@ -127,26 +127,26 @@ idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int
 		else if (in_array(ch, seperators, 10)) {
 			char next = fin.peek();
 			if (next == '%') {
-				st = keyword;
+				//st = keyword;
 				fin.get();
 				return SEP;
 			}
 			else if (next == ']') { //handles *]
-				st = keyword;
+				//st = keyword;
 				fin.get();
 				return SEP;
 			}
 			else if (next == '*') { //handles [*
-				st = keyword;
+				//st = keyword;
 				fin.get();
 				return SEP;
 			}
 			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
-				st = keyword;
+				//st = keyword;
 				return OP;
 			}
 			else {
-				st = keyword;
+				//st = keyword;
 				return SEP;
 			}
 		}//e
@@ -154,12 +154,12 @@ idkey chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&sep)[10], int
 		else if (in_array(ch, operators, 8)) {
 			char next = fin.peek();
 			if (next == '=') {
-				st = keyword;
+				//st = keyword;
 				fin.get();
 				return OP;
 			}
 			else {
-				st = keyword;
+				//st = keyword;
 				return OP;
 			}
 		}
