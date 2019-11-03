@@ -85,7 +85,7 @@ string isKeyword(char buffer[]) {
 	return "-1";
 }
 
-int chew(ifstream& fin, char ch, string &st, int (&op)[8], int (&seperators)[10], int (&fsm)[4][3]){
+int chew(ifstream& fin, char ch, string &st, int (&operators)[8], int (&seperators)[10], int (&fsm)[4][3]){
 //replace all "is a foobah" w/ return values, cout/fout will be handled in main
 
 		if (isalpha(ch)) {
