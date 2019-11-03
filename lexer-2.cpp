@@ -11,7 +11,8 @@ using namespace std;
 
 ifstream fin("./sample.rat19");
 ofstream fout("./output.txt");
-enum idkey{KY,ID,RL,IN,SEP,OP};
+//enum idkey{KY,ID,RL,IN,SEP,OP};
+const int KY = 0, ID = 1, RL = 2, IN = 3, SEP = 4, OP = 5;
 
 int main() {
 
@@ -30,8 +31,8 @@ int main() {
 			};
 	char ch;
 	string idk[]={"keyword","identifier","real number","integer", "seperator", "operator"};
-	string k;
-	idkey i;
+	string k="AAA";
+	int i;
 
 	while (!fin.eof()) {
 		ch = fin.get();
