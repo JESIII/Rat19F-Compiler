@@ -1,0 +1,29 @@
+R1)   A  -> B %% J N %%
+R2)   B  -> C | CC
+R3)   C  -> D | D C
+R4)   D  -> function <Identifier> ( E ) J I
+R5)   E  -> F | CC
+R6)   F  -> G | G , F
+R7)   G  -> <IDs > H
+R8)   H  -> int | boolean | real
+R9)   I  -> { N }
+R10)  J  -> K | CC
+R11)  K  -> L ; | L ; K
+R12)  L  -> H M
+R13)  M  -> <Identifier> | <Identifier>, M
+R14)  N  -> O | O N
+R15)  O  -> P | Q | R | S | T | U | V
+R16)  P  -> { N }
+R17)  Q  -> <Identifier> = Y ;
+R18)  R  -> if ( W ) O fi | if ( W ) O otherwise O fi
+R19)  S  -> return ; | return Y ;
+R20)  T  -> put ( Y);
+R21)  U  -> get ( M );
+R22)  V  -> while ( W ) O
+R23)  W  -> Y X Y
+R24)  X  -> == | /= | > | < | => | <=
+R25)  Y  -> Y + Z| Y - Z|Z
+R26)  Z  -> Z * AA | Z / AA | AA
+R27)  AA -> - BB | BB
+R28)  BB -> <Identifier> | <Integer> | <Identifier> ( M ) | ( Y ) | <Real> | true | false
+R29)  CC ->
