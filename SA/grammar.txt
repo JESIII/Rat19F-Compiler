@@ -1,3 +1,4 @@
+R0)   A' -> A
 R1)   A  -> B %% J N %%
 R2)   B  -> C | CC
 R3)   C  -> D | D C
