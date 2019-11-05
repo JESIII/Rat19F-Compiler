@@ -6,7 +6,9 @@
 #include <string>
 #include <string.h>
 using namespace std;
+void APrime(){
 
+}
 void A(){
 
 }
@@ -101,7 +103,7 @@ void CC(){
 
 }
 int main(){
-  A();
+  APrime();
   if (l == '$'){ //l will be the token being worked on.
     printf("Parsing Successful");
   }
