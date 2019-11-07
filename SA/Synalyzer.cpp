@@ -1,11 +1,14 @@
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string>
-#include <string.h>
+#include "lexer.h"
 using namespace std;
+ifstream src("./output.txt");
+string token;
+string lexeme;
+void getToken(){
+
+}
+void getLexeme(){
+  
+}
 void APrime(){
 
 }
@@ -103,8 +106,6 @@ void CC(){
 
 }
 int main(){
-  APrime();
-  if (l == '$'){ //l will be the token being worked on.
-    printf("Parsing Successful");
-  }
+  lex();
+  src.close();
 }

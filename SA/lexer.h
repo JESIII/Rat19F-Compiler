@@ -5,10 +5,11 @@
 #include <ctype.h>
 #include <string>
 #include <string.h>
-
 using namespace std;
-ifstream fin("./Test-Cases/sample.rat19");
 ofstream fout("./output.txt");
+ifstream fin("../Lexer/Test-Cases/sample.rat19");
+
+
 //=========================================================================
 // Function to check if a key value matches a value in an array
 //=========================================================================
@@ -190,9 +191,5 @@ void lex() {
 		}
 	}
 	fout.close();
-	fin.close();
-}
-int main(){
-	lex();
-	return 0;
+  fin.close();
 }
