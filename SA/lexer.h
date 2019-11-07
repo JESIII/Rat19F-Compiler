@@ -22,7 +22,7 @@ bool in_array(char key, char* arr, int size) {
 	return false;
 }
 //=========================================================================a
-// Function to check if a number:integer or a real number
+// Function to check if a number integer or a real number
 //=========================================================================
 string getNumOrReal(char number) {
 
@@ -119,42 +119,42 @@ void lex() {
 			identifier[++index] = '\0';
 			string keyword = isKeyword(identifier);
 			if (keyword != "-1") {
-				cout << keyword << ":keyword\n";
-				fout << keyword << ":keyword\n";
+				cout << keyword << " keyword\n";
+				fout << keyword << " keyword\n";
 			}
 			else {
-				cout << identifier << ":identifier\n";
-				fout << identifier << ":identifier\n";
+				cout << identifier << " identifier\n";
+				fout << identifier << " identifier\n";
 			}
 		}
 
 		else if (isdigit(ch)) {
 			string number = getNumOrReal(ch);
 			if (number.find(".") != -1) {
-				cout << number << ":real\n";
-				fout << number << ":real\n";
+				cout << number << " real\n";
+				fout << number << " real\n";
 			}
 			else {
-				cout << number << ":integer\n";
-				fout << number << ":integer\n";
+				cout << number << " integer\n";
+				fout << number << " integer\n";
 			}
 		}
 
 		else if (in_array(ch, seperators, 10)) {
 			char next = fin.peek();
 			if (next == '%') {
-				cout << ch << next << ":seperator\n";
-				fout << ch << next << ":seperator\n";
+				cout << ch << next << " seperator\n";
+				fout << ch << next << " seperator\n";
 				fin.get();
 			}
 			else if (next == ']') { //handles *]
-				cout << ch << next << ":seperator\n";
-				fout << ch << next << ":seperator\n";
+				cout << ch << next << " seperator\n";
+				fout << ch << next << " seperator\n";
 				fin.get();
 			}
 			else if (next == '*') { //handles [*
-				cout << ch << next << ":seperator\n";
-				fout << ch << next << ":seperator\n";
+				cout << ch << next << " seperator\n";
+				fout << ch << next << " seperator\n";
 				fin.get();
 				char seeker;
 				while(seeker != '*'){
@@ -163,30 +163,30 @@ void lex() {
 				fin.unget();
 			}
 			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
-				cout << ch << ":operator\n";
-				fout << ch << ":operator\n";
+				cout << ch << " operator\n";
+				fout << ch << " operator\n";
 			}
 			else {
-				cout << ch << ":seperator\n";
-				fout << ch << ":seperator\n";
+				cout << ch << " seperator\n";
+				fout << ch << " seperator\n";
 			}
 		}
 
 		else if (in_array(ch, operators, 8)) {
 			char next = fin.peek();
 			if (next == '>') {
-				cout << ch << next << ":operator\n";
-				fout << ch << next << ":operator\n";
+				cout << ch << next << " operator\n";
+				fout << ch << next << " operator\n";
 				fin.get();
 			}
 			else if (next == '=') {
-				cout << ch << next << ":operator\n";
-				fout << ch << next << ":operator\n";
+				cout << ch << next << " operator\n";
+				fout << ch << next << " operator\n";
 				fin.get();
 			}
 			else {
-				cout << ch << ":operator\n";
-				fout << ch << ":operator\n";
+				cout << ch << " operator\n";
+				fout << ch << " operator\n";
 			}
 		}
 	}

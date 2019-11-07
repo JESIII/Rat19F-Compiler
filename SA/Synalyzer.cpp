@@ -1,13 +1,36 @@
 #include "lexer.h"
+#include <vector>
 using namespace std;
 ifstream src("./output.txt");
+class input{
+public:
+  string token;
+  string lexeme;
+  string gettoken(){
+    return this->token;
+  }
+  string getlexeme(){
+    return this->lexeme;
+  }
+};
 string token;
 string lexeme;
-void getToken(){
-
-}
-void getLexeme(){
-  
+string curLine;
+vector<input> inputs;
+void getInputs(){
+  string token;
+  string lexeme;
+  input temp;
+  while (!src.eof()){
+    src >> token;
+    src >> lexeme;
+    temp.token = token;
+    temp.lexeme = lexeme;
+    inputs.push_back(temp);
+  }
+  for (input i : inputs){
+    cout << i.token << " ----- " << i.lexeme << endl;
+  }
 }
 void APrime(){
 
@@ -107,5 +130,6 @@ void CC(){
 }
 int main(){
   lex();
+  getInputs();
   src.close();
 }
