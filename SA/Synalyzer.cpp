@@ -2,6 +2,8 @@
 #include <vector>
 using namespace std;
 ifstream src("./output.txt");
+//class that holds lexeme and token for each line
+//and has member functions to get them
 class input{
 public:
   string token;
@@ -16,7 +18,9 @@ public:
 string token;
 string lexeme;
 string curLine;
+//vector that holds all of the input lines defined above
 vector<input> inputs;
+//function that puts the output of the lexer into an easy to traverse vector.
 void getInputs(){
   string token;
   string lexeme;
@@ -28,11 +32,15 @@ void getInputs(){
     temp.lexeme = lexeme;
     inputs.push_back(temp);
   }
+  temp.token = "$";
+  temp.lexeme = "$";
+  inputs.push_back(temp);
   for (input i : inputs){
     cout << i.token << " ----- " << i.lexeme << endl;
   }
 }
-void APrime(){
+//Beginning of rules
+void APrime(){//the rule that augments the grammar. Just calls A. Not sure if it needs to check anything.
 
 }
 void A(){
