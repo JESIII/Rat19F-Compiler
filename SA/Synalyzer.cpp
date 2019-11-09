@@ -48,28 +48,87 @@ void APrime(){//the rule that augments the grammar. Just calls A. Not sure if it
   }
 }
 void A(){
-
+  if(B()){
+    if(Lexer() == "seperator" && ch + next == "%%"){
+      if(J()){
+        if(N()){
+          if(Lexer() == "seperator" && ch + next == "%%"){
+            return true;
+          }
+        }
+      }
+    }
+  }
 }
 void B(){
-
+  if(C()){
+    return true;
+  }
+  else{
+    CC();
+  }
 }
 void C(){
-
+  if(D()){
+    return true;
+  }
+  else if (D()){
+    if(C()){
+      return true;
+    }
+  }
 }
 void D(){
-
+  if (Lexer() == "keyword" && keyword == "function"){
+    if (Lexer() == "identifier"){
+      if (Lexer() == "seperator" && ch == '('){
+        if (E()){
+          if (Lexer() == "seperator" && ch == ')'){
+            if(J()){
+              if(I()){
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 void E(){
-
+  if(F()){
+    return true;
+  }
+  else{
+    CC();
+  }
 }
 void F(){
-
+  if(G()){
+    return true;
+  }
+  else if(G()){
+    if(Lexer() == "seperator" && ch == ','){
+      if(F()){
+        return true;
+      }
+    }
+  }
 }
 void G(){
-
+  if (M()){
+    if (H()){
+      return true;
+    }
+  }
 }
 void H(){
-
+  if (Lexer() == "integer"){
+    return true;
+  }
+  else if (Lexer() == "keyword" && (keyword == "true" || keyword == "false")){
+    return true;
+  }
 }
 void I(){
 
@@ -102,13 +161,38 @@ void R(){
 
 }
 void S(){
-
+  if(Lexer() == "keyword" && keyword == "return"){
+    if (Lexer() == "seperator" && ch == ';'){
+      return true;
+    }
+    else if(Y()){
+      if (Lexer() == "seperator" && ch == ';'){
+        return true;
+      }
+    }
+  }
 }
 void T(){
-
+  if(Lexer() == "keyword" && keyword == "put"){
+    if(Lexer() == "seperator" && ch == '('){
+      if (Y()){
+        if (Lexer() == "seperator" && ch == ')'){
+          return true;
+        }
+      }
+    }
+  }
 }
 void U(){
-
+  if(Lexer() == "keyword" && keyword == "get"){
+    if(Lexer() == "seperator" && ch == '('){
+      if (M()){
+        if (Lexer() == "seperator" && ch == ')'){
+          return true;
+        }
+      }
+    }
+  }
 }
 void V(){
   if(Lexer() == "keyword" && keyword == "while"){
@@ -133,8 +217,7 @@ void W(){
   }
 }
 void X(){
-  string operatorrrrrr = ch + next;
-  if (Lexer() == "operator" && (operatorrrrrr == "==" || operatorrrrrr == "/=" || operatorrrrrr == "<=" || operatorrrrrr == "=>" || ch == '<' || ch == '>')){
+  if (Lexer() == "operator" && (ch + next == "==" || ch + next == "/=" || ch + next == "<=" || ch + next == "=>" || ch == '<' || ch == '>')){
     return true;
   }
 }
@@ -200,7 +283,7 @@ void AA(){
     return true;
   }
 }
-void BB(){
+void BB(){ //may have to rewrite this one in proper order.
   if(Lexer() == "identifier" || Lexer() == "integer" || (Lexer() == "seperator" && ch == '(')){
     if(Lexer() == "seperator" && ch == '('){
       if (M()){
