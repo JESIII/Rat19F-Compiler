@@ -6,7 +6,7 @@
 #include <string>
 #include <string.h>
 using namespace std;
-//ofstream fout("./output.txt");
+ofstream fout("./output.txt");
 ifstream fin("../Lexer/Test-Cases/sample.rat19");
 
 
@@ -87,13 +87,14 @@ string isKeyword(char buffer[]) {
 	return "-1";
 }
 
-string Lexer() {
+void lex() {
 	char ch;
+
 	if (!fin.is_open()) {
 		cout << "error while opening the file\n";
 		exit(0);
 	}
-	while (ch != ' ' || ch != '\n'){
+	while (!fin.eof()) {
 		ch = fin.get();
 		char operators[8]= { '+', '-', '/', '*', '=', '<', '!' };
 		char seperators[10] = { '%', ')', '(', ';', '{', '}', '[', ',', ']', '*' };
@@ -120,12 +121,10 @@ string Lexer() {
 			if (keyword != "-1") {
 				cout << keyword << " keyword\n";
 				fout << keyword << " keyword\n";
-				return "keyword";
 			}
 			else {
 				cout << identifier << " identifier\n";
 				fout << identifier << " identifier\n";
-				return "identifier";
 			}
 		}
 
@@ -134,12 +133,10 @@ string Lexer() {
 			if (number.find(".") != -1) {
 				cout << number << " real\n";
 				fout << number << " real\n";
-				return "real";
 			}
 			else {
 				cout << number << " integer\n";
 				fout << number << " integer\n";
-				return "integer";
 			}
 		}
 
@@ -149,13 +146,11 @@ string Lexer() {
 				cout << ch << next << " seperator\n";
 				fout << ch << next << " seperator\n";
 				fin.get();
-				return "seperator";
 			}
 			else if (next == ']') { //handles *]
 				cout << ch << next << " seperator\n";
 				fout << ch << next << " seperator\n";
 				fin.get();
-				return "seperator";
 			}
 			else if (next == '*') { //handles [*
 				cout << ch << next << " seperator\n";
@@ -166,17 +161,14 @@ string Lexer() {
 					fin.get(seeker);
 				}
 				fin.unget();
-				return "seperator";
 			}
 			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
 				cout << ch << " operator\n";
 				fout << ch << " operator\n";
-				return "operator";
 			}
 			else {
 				cout << ch << " seperator\n";
 				fout << ch << " seperator\n";
-				return "seperator";
 			}
 		}
 
@@ -186,24 +178,18 @@ string Lexer() {
 				cout << ch << next << " operator\n";
 				fout << ch << next << " operator\n";
 				fin.get();
-				return "operator";
 			}
 			else if (next == '=') {
 				cout << ch << next << " operator\n";
 				fout << ch << next << " operator\n";
 				fin.get();
-				return "operator";
 			}
 			else {
 				cout << ch << " operator\n";
 				fout << ch << " operator\n";
-				return "operator";
 			}
 		}
 	}
-	//fout.close();
-  //fin.close();
-}
-void LexerDone(){
-	fin.close();
+	fout.close();
+  fin.close();
 }
