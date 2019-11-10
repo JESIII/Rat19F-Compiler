@@ -40,7 +40,7 @@ void getInputs(){
     cout << i.token << " ----- " << i.lexeme << endl;
   }
 }
-*/
+
 //Beginning of rules
 void APrime(){//the rule that augments the grammar. Just calls A. Not sure if it needs to check anything.
   if (A()){
@@ -131,7 +131,13 @@ void H(){
   }
 }
 void I(){
-
+  if(Lexer() == "seperator" && ch == '{'){
+    if(N()){
+      if(Lexer() == "seperator" && ch == '}'){
+        return true;
+      }
+    }
+  }
 }
 void J(){
 
@@ -306,8 +312,12 @@ void BB(){ //may have to rewrite this one in proper order.
     return true;
   }
 }
+*/
 void CC(){
   LexerDone();
 }
 int main(){
+  while(Lexer() != "$"){
+    
+  }
 }

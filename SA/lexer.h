@@ -6,7 +6,7 @@
 #include <string>
 #include <string.h>
 using namespace std;
-//ofstream fout("./output.txt");
+ofstream fout("./output.txt");
 ifstream fin("../Lexer/Test-Cases/sample.rat19");
 
 
@@ -203,6 +203,7 @@ string Lexer() {
 	}
 	//fout.close();
   //fin.close();
+	return "$";
 }
 void LexerDone(){
 	fin.close();
