@@ -2,6 +2,7 @@
 #include <vector>
 using namespace std;
 ifstream src("./output.txt");
+
 //class that holds lexeme and token for each line
 //and has member functions to get them
 /*
@@ -318,6 +319,6 @@ void CC(){
 }
 int main(){
   while(Lexer() != "$"){
-    
+
   }
 }

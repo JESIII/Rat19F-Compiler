@@ -8,8 +8,11 @@
 using namespace std;
 ofstream fout("./output.txt");
 ifstream fin("../Lexer/Test-Cases/sample.rat19");
-
-
+char next;
+char ch;
+string keyword;
+string identifier;
+string number;
 //=========================================================================
 // Function to check if a key value matches a value in an array
 //=========================================================================
@@ -88,7 +91,6 @@ string isKeyword(char buffer[]) {
 }
 
 string Lexer() {
-	char ch;
 	if (!fin.is_open()) {
 		cout << "error while opening the file\n";
 		exit(0);
@@ -108,7 +110,7 @@ string Lexer() {
 			int index = 0;
 			char identifier[100];
 			identifier[0] = ch;
-			char next = fin.peek();
+			next = fin.peek();
 			while (isalnum(next) || next == '_') {
 				index++;
 				identifier[index] = next;
@@ -116,7 +118,7 @@ string Lexer() {
 				next = fin.peek();
 			}
 			identifier[++index] = '\0';
-			string keyword = isKeyword(identifier);
+			keyword = isKeyword(identifier);
 			if (keyword != "-1") {
 				cout << keyword << " keyword\n";
 				fout << keyword << " keyword\n";
@@ -130,7 +132,7 @@ string Lexer() {
 		}
 
 		else if (isdigit(ch)) {
-			string number = getNumOrReal(ch);
+			number = getNumOrReal(ch);
 			if (number.find(".") != -1) {
 				cout << number << " real\n";
 				fout << number << " real\n";
@@ -144,7 +146,7 @@ string Lexer() {
 		}
 
 		else if (in_array(ch, seperators, 10)) {
-			char next = fin.peek();
+			next = fin.peek();
 			if (next == '%') {
 				cout << ch << next << " seperator\n";
 				fout << ch << next << " seperator\n";
@@ -181,7 +183,7 @@ string Lexer() {
 		}
 
 		else if (in_array(ch, operators, 8)) {
-			char next = fin.peek();
+			next = fin.peek();
 			if (next == '>') {
 				cout << ch << next << " operator\n";
 				fout << ch << next << " operator\n";
