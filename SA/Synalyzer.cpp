@@ -102,31 +102,130 @@ void I(){
   }
 }
 void J(){
-
+  if(K()){
+    return true;
+  }
+  else {
+    CC();
+  }
 }
 void K(){
-
+  if(L()){
+    if(Lexer() == "seperator" && ch == ';'){
+      return true;
+    }
+  }
+  else if(L()){
+    if(Lexer() == "seperator" && ch == ';'){
+      if(K()){
+        return true;
+      }
+    }
+  }
 }
 void L(){
-
+  if(H()){
+    if(M()){
+      return true;
+    }
+  }
 }
 void M(){
-
+  if(Lexer()=="identifier"){
+    return true;
+  }
+  else if(Lexer() == "identifier"){
+    if(Lexer() == "seperator" && ch == ','){
+      if (M()){
+        return true;
+      }
+    }
+  }
 }
 void N(){
-
+  if(O()){
+    return true;
+  }
+  else if(O()){
+    if(N()){
+      return true;
+    }
+  }
 }
 void O(){
+  if(P(){
 
+  }
+  else if(Q()){
+    return true;
+  }
+  else if(R()){
+    return true;
+  }
+  else if(S()){
+    return true;
+  }
+  else if(T()){
+    return true;
+  }
+  else if(U()){
+    return true;
+  }
+  else if(V()){
+    return true;
+  }
 }
 void P(){
-
+  if(Lexer() == "seperator" && ch == '{'){
+    if (N()){
+      if(Lexer() == "seperator" && ch == '}'){
+        return true;
+      }
+    }
+  }
 }
 void Q(){
-
+  if (Lexer() == "identifier"){
+    if(Lexer() == "seperator" && ch == '='){
+      if(Y()){
+        if(Lexer() == "seperator" && ch == ';'){
+          return true;
+        }
+      }
+    }
+  }
 }
 void R(){
-
+  if(Lexer() == "keyword" && keyword == "if"){
+    if(Lexer() == "seperator" && ch == '('{
+      if(W()){
+        if(Lexer() == "seperator" && ch == ')'){
+          if(O()){
+            if(Lexer() == "keyword" && keyword == "fi"){
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+  else if(Lexer() == "keyword" && keyword == "if"){
+    if(Lexer() == "seperator" && ch == '('{
+      if(W()){
+        if(Lexer() == "seperator" && ch == ')'){
+          if(O()){
+            if(Lexer() == "keyword" && keyword == "otherwise"){
+              if(O()){
+                if(Lexer() == "keyword" && keyword == "fi"){
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 void S(){
   if(Lexer() == "keyword" && keyword == "return"){
@@ -251,8 +350,14 @@ void AA(){
     return true;
   }
 }
-void BB(){ //may have to rewrite this one in proper order.
-  if(Lexer() == "identifier" || Lexer() == "integer" || (Lexer() == "seperator" && ch == '(')){
+void BB(){ 
+  if(Lexer() == "identifier"){
+    return true;
+  }
+  else if(Lexer() == "integer"){
+    return true;
+  }
+  else if(Lexer() == "identifier"){
     if(Lexer() == "seperator" && ch == '('){
       if (M()){
         if (Lexer() == "seperator" && ch == ')'){
@@ -260,17 +365,18 @@ void BB(){ //may have to rewrite this one in proper order.
         }
       }
     }
-    else if (Y()){
+  }
+  else if(Lexer() == "seperator" && ch == '('){
+    if (Y()){
       if (Lexer() == "seperator" && ch == ')'){
         return true;
       }
     }
-    return true;
   }
   else if(Lexer() == "real"){
     return true;
   }
-  else if(Lexer() == "keyword" && (keyword == "true" || keyword == "false")){
+  else if(Lexer() == "keyword" && keyword == "true" || keyword == "false"){
     return true;
   }
 }
@@ -279,7 +385,7 @@ void CC(){
   LexerDone();
 }
 int main(){
-  while(Lexer() != "$"){
-
+  if(APrime()){
+    cout << "Parsing complete.";
   }
 }
