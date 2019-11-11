@@ -4,12 +4,13 @@ using namespace std;
 ifstream src("./output.txt");
 
 //Beginning of rules
-void APrime(){//the rule that augments the grammar. Just calls A. Not sure if it needs to check anything.
+bool APrime(){//the rule that augments the grammar. Just calls A. Not sure if it needs to check anything.
   if (A()){
     return true;
   }
+  return false;
 }
-void A(){
+bool A(){
   if(B()){
     if(Lexer() == "seperator" && ch + next == "%%"){
       if(J()){
@@ -21,16 +22,18 @@ void A(){
       }
     }
   }
+  return false;
 }
-void B(){
+bool B(){
   if(C()){
     return true;
   }
   else{
     CC();
   }
+  return false;
 }
-void C(){
+bool C(){
   if(D()){
     return true;
   }
@@ -39,8 +42,9 @@ void C(){
       return true;
     }
   }
+  return false;
 }
-void D(){
+bool D(){
   if (Lexer() == "keyword" && keyword == "function"){
     if (Lexer() == "identifier"){
       if (Lexer() == "seperator" && ch == '('){
@@ -56,16 +60,18 @@ void D(){
       }
     }
   }
+  return false;
 }
-void E(){
+bool E(){
   if(F()){
     return true;
   }
   else{
     CC();
   }
+  return false;
 }
-void F(){
+bool F(){
   if(G()){
     return true;
   }
@@ -76,23 +82,26 @@ void F(){
       }
     }
   }
+  return false;
 }
-void G(){
+bool G(){
   if (M()){
     if (H()){
       return true;
     }
   }
+  return false;
 }
-void H(){
+bool H(){
   if (Lexer() == "integer"){
     return true;
   }
   else if (Lexer() == "keyword" && (keyword == "true" || keyword == "false")){
     return true;
   }
+  return false;
 }
-void I(){
+bool I(){
   if(Lexer() == "seperator" && ch == '{'){
     if(N()){
       if(Lexer() == "seperator" && ch == '}'){
@@ -100,16 +109,18 @@ void I(){
       }
     }
   }
+  return false;
 }
-void J(){
+bool J(){
   if(K()){
     return true;
   }
   else {
     CC();
   }
+  return false;
 }
-void K(){
+bool K(){
   if(L()){
     if(Lexer() == "seperator" && ch == ';'){
       return true;
@@ -122,15 +133,17 @@ void K(){
       }
     }
   }
+  return false;
 }
-void L(){
+bool L(){
   if(H()){
     if(M()){
       return true;
     }
   }
+  return false;
 }
-void M(){
+bool M(){
   if(Lexer()=="identifier"){
     return true;
   }
@@ -141,8 +154,9 @@ void M(){
       }
     }
   }
+  return false;
 }
-void N(){
+bool N(){
   if(O()){
     return true;
   }
@@ -151,8 +165,9 @@ void N(){
       return true;
     }
   }
+  return false;
 }
-void O(){
+bool O(){
   if(P(){
 
   }
@@ -174,8 +189,9 @@ void O(){
   else if(V()){
     return true;
   }
+  return false;
 }
-void P(){
+bool P(){
   if(Lexer() == "seperator" && ch == '{'){
     if (N()){
       if(Lexer() == "seperator" && ch == '}'){
@@ -183,8 +199,9 @@ void P(){
       }
     }
   }
+  return false;
 }
-void Q(){
+bool Q(){
   if (Lexer() == "identifier"){
     if(Lexer() == "seperator" && ch == '='){
       if(Y()){
@@ -194,8 +211,9 @@ void Q(){
       }
     }
   }
+  return false;
 }
-void R(){
+bool R(){
   if(Lexer() == "keyword" && keyword == "if"){
     if(Lexer() == "seperator" && ch == '('{
       if(W()){
@@ -208,6 +226,7 @@ void R(){
         }
       }
     }
+    return false;
   }
   else if(Lexer() == "keyword" && keyword == "if"){
     if(Lexer() == "seperator" && ch == '('{
@@ -226,8 +245,9 @@ void R(){
       }
     }
   }
+  return false;
 }
-void S(){
+bool S(){
   if(Lexer() == "keyword" && keyword == "return"){
     if (Lexer() == "seperator" && ch == ';'){
       return true;
@@ -238,8 +258,9 @@ void S(){
       }
     }
   }
+  return false;
 }
-void T(){
+bool T(){
   if(Lexer() == "keyword" && keyword == "put"){
     if(Lexer() == "seperator" && ch == '('){
       if (Y()){
@@ -249,8 +270,9 @@ void T(){
       }
     }
   }
+  return false;
 }
-void U(){
+bool U(){
   if(Lexer() == "keyword" && keyword == "get"){
     if(Lexer() == "seperator" && ch == '('){
       if (M()){
@@ -260,8 +282,9 @@ void U(){
       }
     }
   }
+  return false;
 }
-void V(){
+bool V(){
   if(Lexer() == "keyword" && keyword == "while"){
     if(Lexer() == "seperator" && ch == '('){
       if (W()){
@@ -273,8 +296,9 @@ void V(){
       }
     }
   }
+  return false;
 }
-void W(){
+bool W(){
   if(Y()){
     if(X()){
       if(Y()){
@@ -282,20 +306,23 @@ void W(){
       }
     }
   }
+  return false;
 }
-void X(){
+bool X(){
   if (Lexer() == "operator" && (ch + next == "==" || ch + next == "/=" || ch + next == "<=" || ch + next == "=>" || ch == '<' || ch == '>')){
     return true;
   }
+  return false;
 }
-void Y(){
+bool Y(){
   if(Z()){
     if(YPrime()){
       return true;
     }
   }
+  return false;
 }
-void YPrime(){
+bool YPrime(){
   if (Lexer() == "operator" && ch == '+'){
     if(Z()){
       if(YPrime()){
@@ -313,15 +340,17 @@ void YPrime(){
   else{
     CC();
   }
+  return false;
 }
-void Z(){
+bool Z(){
   if(AA()){
     if(ZPrime()){
       return true;
     }
   }
+  return false;
 }
-void ZPrime(){
+bool ZPrime(){
   if(Lexer() == "operator" && ch == '*'){
     if(AA()){
       if(ZPrime()){
@@ -339,8 +368,9 @@ void ZPrime(){
   else{
     CC();
   }
+  return false;
 }
-void AA(){
+bool AA(){
   if(Lexer() == "operator" && ch == '-'){
     if(BB()){
       return true;
@@ -349,8 +379,9 @@ void AA(){
   else if (BB()){
     return true;
   }
+  return false;
 }
-void BB(){ 
+bool BB(){
   if(Lexer() == "identifier"){
     return true;
   }
@@ -379,6 +410,7 @@ void BB(){
   else if(Lexer() == "keyword" && keyword == "true" || keyword == "false"){
     return true;
   }
+  return false;
 }
 
 void CC(){
