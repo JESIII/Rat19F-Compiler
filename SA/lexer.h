@@ -8,7 +8,7 @@
 using namespace std;
 ofstream fout("./output.txt");
 ifstream fin("../Lexer/Test-Cases/sample.rat19");
-char next;
+char ch2;
 char ch;
 string keyword;
 string identifier;
@@ -110,23 +110,23 @@ string Lexer() {
 			int index = 0;
 			char identifier[100];
 			identifier[0] = ch;
-			next = fin.peek();
-			while (isalnum(next) || next == '_') {
+			ch2 = fin.peek();
+			while (isalnum(ch2) || ch2 == '_') {
 				index++;
-				identifier[index] = next;
+				identifier[index] = ch2;
 				fin.get();
-				next = fin.peek();
+				ch2 = fin.peek();
 			}
 			identifier[++index] = '\0';
 			keyword = isKeyword(identifier);
 			if (keyword != "-1") {
-				cout << keyword << " keyword\n";
-				fout << keyword << " keyword\n";
+				cout << "Token: keyword" <<" Lexeme: "<< keyword << endl;
+				//fout << keyword << " keyword\n";
 				return "keyword";
 			}
 			else {
-				cout << identifier << " identifier\n";
-				fout << identifier << " identifier\n";
+				cout << "Token: identifier " << "Lexeme: " << identifier << endl;
+				//fout << identifier << " identifier\n";
 				return "identifier";
 			}
 		}
@@ -134,34 +134,34 @@ string Lexer() {
 		else if (isdigit(ch)) {
 			number = getNumOrReal(ch);
 			if (number.find(".") != -1) {
-				cout << number << " real\n";
-				fout << number << " real\n";
+				cout <<  "Token: real " << "Lexeme: "<< number <<endl;
+				//fout << number << " real\n";
 				return "real";
 			}
 			else {
-				cout << number << " integer\n";
+				cout <<  "Token: integer " << "Lexeme: "<< number <<endl;
 				fout << number << " integer\n";
 				return "integer";
 			}
 		}
 
 		else if (in_array(ch, seperators, 10)) {
-			next = fin.peek();
-			if (next == '%') {
-				cout << ch << next << " seperator\n";
-				fout << ch << next << " seperator\n";
+			ch2 = fin.peek();
+			if (ch2 == '%') {
+				cout <<  "Token: seperator " << "Lexeme: "<< ch << ch2 <<endl;
+				//fout << ch << ch2 << " seperator\n";
 				fin.get();
 				return "seperator";
 			}
-			else if (next == ']') { //handles *]
-				cout << ch << next << " seperator\n";
-				fout << ch << next << " seperator\n";
+			else if (ch2 == ']') { //handles *]
+				cout << ch << ch2 << " seperator\n";
+				fout << ch << ch2 << " seperator\n";
 				fin.get();
 				return "seperator";
 			}
-			else if (next == '*') { //handles [*
-				cout << ch << next << " seperator\n";
-				fout << ch << next << " seperator\n";
+			else if (ch2 == '*') { //handles [*
+				cout << ch << ch2 << " seperator\n";
+				fout << ch << ch2 << " seperator\n";
 				fin.get();
 				char seeker;
 				while(seeker != '*'){
@@ -183,16 +183,16 @@ string Lexer() {
 		}
 
 		else if (in_array(ch, operators, 8)) {
-			next = fin.peek();
-			if (next == '>') {
-				cout << ch << next << " operator\n";
-				fout << ch << next << " operator\n";
+			ch2 = fin.peek();
+			if (ch2 == '>') {
+				cout << ch << ch2 << " operator\n";
+				fout << ch << ch2 << " operator\n";
 				fin.get();
 				return "operator";
 			}
-			else if (next == '=') {
-				cout << ch << next << " operator\n";
-				fout << ch << next << " operator\n";
+			else if (ch2 == '=') {
+				cout << ch << ch2 << " operator\n";
+				fout << ch << ch2 << " operator\n";
 				fin.get();
 				return "operator";
 			}
