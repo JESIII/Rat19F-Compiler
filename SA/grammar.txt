@@ -1,23 +1,23 @@
 R0)   A' -> A
 R1)   A  -> B %% J N %%
 R2)   B  -> C | CC
-R3)   C  -> D | D C
+R3)   C  -> D | D C //remove backtracking
 R4)   D  -> function <Identifier> ( E ) J I
 R5)   E  -> F | CC
-R6)   F  -> G | G , F
+R6)   F  -> G | G , F //remove backtracking
 R7)   G  -> M H
 R8)   H  -> int | boolean | real
 R9)   I  -> { N }
 R10)  J  -> K | CC
-R11)  K  -> L ; | L ; K
+R11)  K  -> L ; | L ; K //remove backtracking
 R12)  L  -> H M
-R13)  M  -> <Identifier> | <Identifier>, M
-R14)  N  -> O | O N
+R13)  M  -> <Identifier> | <Identifier>, M //remove backtracking
+R14)  N  -> O | O N //remove backtracking
 R15)  O  -> P | Q | R | S | T | U | V
 R16)  P  -> { N }
 R17)  Q  -> <Identifier> = Y ;
-R18)  R  -> if ( W ) O fi | if ( W ) O otherwise O fi
-R19)  S  -> return ; | return Y ;
+R18)  R  -> if ( W ) O fi | if ( W ) O otherwise O fi //remove backtracking
+R19)  S  -> return ; | return Y ; // remove backtracking
 R20)  T  -> put ( Y );
 R21)  U  -> get ( M );
 R22)  V  -> while ( W ) O
@@ -28,7 +28,7 @@ R26)  Y' -> + Z Y' | - Z Y' | CC
 R27)  Z -> AA Z'
 R28)  Z' -> * AA Z' | / AA Z' | CC
 R29)  AA -> - BB | BB
-R30)  BB -> <Identifier> | <Integer> | <Identifier> ( M ) | ( Y ) | <Real> | true | false
+R30)  BB -> <Identifier> | <Integer> | <Identifier> ( M ) | ( Y ) | <Real> | true | false //remove backtracking
 R31)  CC ->
 
 Below is work for removing left recursion

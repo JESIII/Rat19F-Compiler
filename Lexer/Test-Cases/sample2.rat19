@@ -1,12 +1,24 @@
-%
-while  (fahr <= upper)   a = 23.00;
-float hi, hiyabusa929, checkmate_12;
-checkmate_12 = 3;
-if (checkmate_12 == 3){
-    hi = 0;
+[*
+This is the second test case for the rat19f compiler Hopefully it works
+*]
+function add (one int, two int)
+{
+           return one + two;
 }
-hiyabusa929 = 123.123;
-int truth = 1;
-[* this programs does nothing *]
-return hi;
+function subtract (one int, two int)
+{
+           return one - two;
+}
+function gt (one int, two int)
+{
+  if ( one >= two )
+  return true;
+  otherwise
+  return false;
+  fi
+}
+%%
+int n, m, result;
+get(n, m);
+result = subtract(n, m);
 %%

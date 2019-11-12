@@ -1,6 +1,17 @@
-%%
-good meme
-for ( 1 == 1.34 ) {
-do something while test = true
+function gt (one int, two int)
+{
+  if ( one >= two )
+  return true;
+  otherwise
+  return false;
+  fi
 }
+%%
+int one, two;
+get(one,two);
+if (gt(one, two))
+return true;
+otherwise
+return false;
+fi
 %%
