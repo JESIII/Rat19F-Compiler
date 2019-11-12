@@ -1,0 +1,17 @@
+function gt (one int, two int)
+{
+  if ( one >= two )
+  return true;
+  otherwise
+  return false;
+  fi
+}
+%%
+int one, two;
+get(one,two);
+if (gt(one, two))
+return true;
+otherwise
+return false;
+fi
+%%

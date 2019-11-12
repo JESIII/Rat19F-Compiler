@@ -1,0 +1,24 @@
+[*
+This is the second test case for the rat19f compiler Hopefully it works
+*]
+function add (one int, two int)
+{
+           return one + two;
+}
+function subtract (one int, two int)
+{
+           return one - two;
+}
+function gt (one int, two int)
+{
+  if ( one >= two )
+  return true;
+  otherwise
+  return false;
+  fi
+}
+%%
+int n, m, result;
+get(n, m);
+result = subtract(n, m);
+%%
