@@ -4,18 +4,24 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string>
-#include <string.h>
+#include <vector>
 //#include "lexer.h"
 using namespace std;
 ofstream fout("./output.txt");
-ifstream fin("../Lexer/Test-Cases/sample.rat19");
+ifstream fin("C:/Users/winds/Desktop/Rat19F-Compiler-master/Lexer/Test-Cases/sample.rat19");
 char ch2;
 char ch;
 string ch3;
 string keyword;
 string identifier;
 string number;
-void CC();
+int lineNumber = 1;
+vector<vector<string>> tokens;
+int tokenCounter = -1;
+void SetTokenCounter(int);
+int GetTokenCounter();
+vector<string> GetNextToken();
+vector<string> GetToken();
 bool BB();
 bool AA();
 bool ZPrime();
@@ -125,13 +131,40 @@ string isKeyword(char buffer[]) {
 	return "-1";
 }
 
-string Lexer() {
+void SetTokenCounter(int count) {
+	tokenCounter = count;
+	cout << "COUNTER MOVED TO: " << GetTokenCounter() << endl;
+}
+
+int GetTokenCounter() {
+	return tokenCounter;
+}
+
+vector<string> GetNextToken() {
+	tokenCounter++;
+	cout << "COUNTER: " << GetTokenCounter() << endl;
+	cout << GetToken()[0] << ": " << GetToken()[1] << endl;
+	return GetToken();
+}
+
+vector<string> GetToken() {
+	return tokens.at(tokenCounter);
+}
+
+void Lexer() {
 	if (!fin.is_open()) {
 		cout << "error while opening the file\n";
 		exit(0);
 	}
-	while (ch != ' ' || ch != '\n'){
+	while (!fin.eof()){
 		ch = fin.get();
+		if (ch == ' ') {
+			continue;
+		}
+		if (ch == '\n') {
+			lineNumber++;
+			continue;
+		}
 		char operators[8]= { '+', '-', '/', '*', '=', '<', '!' };
 		char seperators[10] = { '%', ')', '(', ';', '{', '}', '[', ',', ']', '*' };
 
@@ -155,93 +188,71 @@ string Lexer() {
 			identifier[++index] = '\0';
       keyword = isKeyword(identifier);
 			if (keyword != "-1") {
-				cout << "Token: keyword" <<"           Lexeme: "<< keyword << endl;
-				//fout << keyword << " keyword\n";
-				return "keyword";
+				tokens.push_back(vector<string>{ "keyword",keyword });
 			}
 			else {
-				cout << "Token: identifier " << "          Lexeme: " << identifier << endl;
-				//fout << identifier << " identifier\n";
-				return "identifier";
+				tokens.push_back(vector<string>{ "identifier", identifier });
 			}
 		}
 
 		else if (isdigit(ch)) {
 			number = getNumOrReal(ch);
 			if (number.find(".") != -1) {
-				cout <<  "Token: real " << "          Lexeme: "<< number <<endl;
-				//fout << number << " real\n";
-				return "real";
+				tokens.push_back(vector<string>{ "real", number });
 			}
 			else {
-				cout <<  "Token: integer " << "          Lexeme: "<< number <<endl;
-				fout << number << " integer\n";
-				return "integer";
+				tokens.push_back(vector<string>{ "integer", number });
 			}
 		}
 
 		else if (in_array(ch, seperators, 10)) {
 			ch2 = fin.peek();
 			if (ch2 == '%') {
-				cout <<  "Token: seperator " << "          Lexeme: "<< ch << ch2 <<endl;
-				//fout << ch << ch2 << " seperator\n";
 				fin.get();
-				return "seperator";
+				tokens.push_back(vector<string>{ "seperator", string() + ch + ch2 });
 			}
 			else if (ch2 == ']') { //handles *]
-				cout <<  "Token: seperator " << "          Lexeme: "<< ch << ch2 <<endl;
-				//fout << ch << ch2 << " seperator\n";
 				fin.get();
-				return "seperator";
+				tokens.push_back(vector<string>{ "seperator", string() + ch + ch2 });
 			}
 			else if (ch2 == '*') { //handles [*
-				cout <<  "Token: seperator " << "          Lexeme: "<< ch << ch2 <<endl;
-				//fout << ch << ch2 << " seperator\n";
-				fin.get();
-				char seeker;
+				char seeker = fin.get();
 				while(seeker != '*'){
 					fin.get(seeker);
 				}
 				fin.unget();
-				return "seperator";
+				tokens.push_back(vector<string>{ "seperator", string() + ch + ch2 });
 			}
 			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
-				cout <<  "Token: operator " << "          Lexeme: "<< ch <<endl;
-				//fout << ch << " operator\n";
-				return "operator";
+				tokens.push_back(vector<string>{ "operator", string() + ch });
 			}
 			else {
-				cout <<  "Token: seperator " << "          Lexeme: "<< ch <<endl;
-				//fout << ch << " seperator\n";
-				return "seperator";
+				tokens.push_back(vector<string>{ "seperator", string() +  ch });
 			}
 		}
 
 		else if (in_array(ch, operators, 8)) {
 			ch2 = fin.peek();
 			if (ch2 == '>') {
-				cout <<  "Token: operator " << "          Lexeme: "<< ch << ch2 <<endl;
-				//fout << ch << ch2 << " operator\n";
 				fin.get();
-				return "operator";
+				tokens.push_back(vector<string>{ "operator", string() + ch + ch2 });
 			}
 			else if (ch2 == '=') {
-				cout <<  "Token: operator " << "          Lexeme: "<< ch << ch2 <<endl;
-				//fout << ch << ch2 << " operator\n";
 				fin.get();
-				return "operator";
+				tokens.push_back(vector<string>{ "operator", string() + ch + ch2 });
 			}
 			else {
-				cout <<  "Token: operator " << "          Lexeme: "<< ch <<endl;
-				//fout << ch << " operator\n";
-				return "operator";
+				tokens.push_back(vector<string>{ "operator", string() + ch + ch2 });
 			}
 		}
 	}
 	//fout.close();
   //fin.close();
-  cout << "hmm";
-	return "$";
+	cout << "LEXER COMPLETE!" << endl;
+  for (unsigned int i = 0; i < tokens.size(); i++) {
+	  cout << tokens.at(i)[0] << ": " << tokens.at(i)[1] << endl;
+  }
+  return;
 }
 void LexerDone(){
 	fin.close();
@@ -255,12 +266,11 @@ bool APrime(){//the rule that augments the grammar. Just calls A. Not sure if it
 }
 ///////////////////////////////////////
 bool A(){
-  ch3 = ch + ch2;
   if(B()){
-    if(Lexer() == "seperator" && ch3 == "%%"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "%%"){
       if(J()){
         if(N()){
-          if(Lexer() == "seperator" && ch3 == "%%"){
+          if(GetNextToken()[0] == "seperator" && GetToken()[1] == "%%"){
             return true;
           }
         }
@@ -271,33 +281,36 @@ bool A(){
 }
 ///////////////////////////////////////
 bool B(){
+  int counter = GetTokenCounter();
+
   if(C()){
     return true;
   }
-  else{
-    CC();
-  }
-  return false;
+
+  SetTokenCounter(counter);
+  return true;
 }
 ///////////////////////////////////////
 bool C(){
   if(D()){
-    return true;
-  }
-  else if (D()){
-    if(C()){
-      return true;
-    }
+	  int counter = GetTokenCounter();
+	  if (C()) {
+		  return true;
+	  }
+	  else {
+		  SetTokenCounter(counter);
+		  return true;
+	  }
   }
   return false;
 }
 ///////////////////////////////////////
 bool D(){
-  if (Lexer() == "keyword" && keyword == "function"){
-    if (Lexer() == "identifier"){
-      if (Lexer() == "seperator" && ch == '('){
+  if (GetNextToken()[0] == "keyword" && GetToken()[1] == "function"){
+    if (GetNextToken()[0] == "identifier"){
+      if (GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
         if (E()){
-          if (Lexer() == "seperator" && ch == ')'){
+          if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
             if(J()){
               if(I()){
                 return true;
@@ -312,25 +325,28 @@ bool D(){
 }
 ///////////////////////////////////////
 bool E(){
+  int counter = GetTokenCounter();
+
   if(F()){
     return true;
   }
-  else{
-    CC();
-  }
-  return false;
+
+  SetTokenCounter(counter);
+  return true;
 }
 ///////////////////////////////////////
 bool F(){
   if(G()){
-    return true;
-  }
-  else if(G()){
-    if(Lexer() == "seperator" && ch == ','){
-      if(F()){
-        return true;
-      }
-    }
+	  int counter = GetTokenCounter();
+	  if (GetNextToken()[0] == "seperator" && GetToken()[1] == ",") {
+		  if (F()) {
+			  return true;
+		  }
+	  }
+	  else {
+		  SetTokenCounter(counter);
+		  return true;
+	  }
   }
   return false;
 }
@@ -345,19 +361,16 @@ bool G(){
 }
 ///////////////////////////////////////
 bool H(){
-  if (Lexer() == "integer"){
-    return true;
-  }
-  else if (Lexer() == "keyword" && (keyword == "true" || keyword == "false")){
+  if (GetNextToken()[0] == "keyword" && (GetToken()[1] == "int" || GetToken()[1] == "boolean" || GetToken()[1] == "real")){
     return true;
   }
   return false;
 }
 ///////////////////////////////////////
 bool I(){
-  if(Lexer() == "seperator" && ch == '{'){
+  if(GetNextToken()[0] == "seperator" && GetToken()[1] == "{"){
     if(N()){
-      if(Lexer() == "seperator" && ch == '}'){
+      if(GetNextToken()[0] == "seperator" && GetToken()[1] == "}"){
         return true;
       }
     }
@@ -366,26 +379,27 @@ bool I(){
 }
 ///////////////////////////////////////
 bool J(){
+  int counter = GetTokenCounter();
+
   if(K()){
     return true;
   }
-  else {
-    CC();
-  }
-  return false;
+
+  SetTokenCounter(counter);
+  return true;
 }
 ///////////////////////////////////////
 bool K(){
   if(L()){
-    if(Lexer() == "seperator" && ch == ';'){
-      return true;
-    }
-  }
-  else if(L()){
-    if(Lexer() == "seperator" && ch == ';'){
-      if(K()){
-        return true;
-      }
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == ";"){
+		int counter = GetTokenCounter();
+		if (K()) {
+			return true;
+		}
+		else {
+			SetTokenCounter(counter);
+			return true;
+		}
     }
   }
   return false;
@@ -401,69 +415,96 @@ bool L(){
 }
 ///////////////////////////////////////
 bool M(){
-  if(Lexer()=="identifier"){
-    return true;
-  }
-  else if(Lexer() == "identifier"){
-    if(Lexer() == "seperator" && ch == ','){
-      if (M()){
-        return true;
-      }
-    }
+  if(GetNextToken()[0] =="identifier"){
+	  int counter = GetTokenCounter();
+	  if (GetNextToken()[0] == "seperator" && GetToken()[1] == ",") {
+		  if (M()) {
+			  return true;
+		  }
+	  }
+	  else {
+		  SetTokenCounter(counter);
+		  return true;
+	  }
   }
   return false;
 }
 ///////////////////////////////////////
 bool N(){
-  if(O()){
-    cout << "<Statement>   "<<endl;
+  if (O()) {
+	  int counter = GetTokenCounter();
+	  if (N()) {
+		  cout << "<Statement> <Statement List>" << endl;
+		  return true;
+	  }
+	  else {
+		  SetTokenCounter(counter);
+		  cout << "<Statement>" << endl;
+		  return true;
+	  }
     return true;
-  }
-  else if(O()){
-    if(N()){
-      cout << "<Statement> <Statement List>"<<endl;
-      return true;
-    }
   }
   return false;
 }
 ///////////////////////////////////////
 bool O(){
+  int counter = GetTokenCounter();
+
   if(P()){
     cout << "<Compound> "<<endl;
     return true;
   }
-  else if(Q()){
+
+  SetTokenCounter(counter);
+
+  if(Q()){
     cout << "<Assign>   "<<endl;
     return true;
   }
-  else if(R()){
+  
+  SetTokenCounter(counter);
+
+  if(R()){
     cout << "<If>   "<<endl;
     return true;
   }
-  else if(S()){
+
+  SetTokenCounter(counter);
+
+  if(S()){
     cout << "<Return>      "<<endl;
     return true;
   }
-  else if(T()){
+
+  SetTokenCounter(counter);
+
+  if(T()){
     cout << "<Print>       "<<endl;
     return true;
   }
-  else if(U()){
+
+  SetTokenCounter(counter);
+
+  if(U()){
     cout << "<Scan>     "<<endl;
     return true;
   }
-  else if(V()){
+
+  SetTokenCounter(counter);
+
+  if(V()){
     cout << "<While> "<<endl;
     return true;
   }
+
+  SetTokenCounter(counter);
   return false;
 }
 ///////////////////////////////////////
 bool P(){
-  if(Lexer() == "seperator" && ch == '{'){
+  if(GetNextToken()[0] == "seperator" && GetToken()[1] == "{"){
     if (N()){
-      if(Lexer() == "seperator" && ch == '}'){
+      if(GetNextToken()[0] == "seperator" && GetToken()[1] == "}"){
         cout << "{  <Statement List>  } "<<endl;
         return true;
       }
@@ -473,10 +514,10 @@ bool P(){
 }
 ///////////////////////////////////////
 bool Q(){
-  if (Lexer() == "identifier"){
-    if(Lexer() == "seperator" && ch == '='){
+  if (GetNextToken()[0] == "identifier"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "="){
       if(Y()){
-        if(Lexer() == "seperator" && ch == ';'){
+        if(GetNextToken()[0] == "seperator" && GetToken()[1] == ";"){
           cout << "<Identifier> = <Expression> ;"<<endl;
           return true;
         }
@@ -487,12 +528,14 @@ bool Q(){
 }
 ///////////////////////////////////////
 bool R(){
-  if(Lexer() == "keyword" && keyword == "if"){
-    if(Lexer() == "seperator" && ch == '('){
+  int counter = GetTokenCounter();
+
+  if(GetNextToken()[0] == "keyword" && GetToken()[1] == "if"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if(W()){
-        if(Lexer() == "seperator" && ch == ')'){
+        if(GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
           if(O()){
-            if(Lexer() == "keyword" && keyword == "fi"){
+            if(GetNextToken()[0] == "keyword" && GetToken()[1] == "fi"){
               cout << "if  ( <Condition>  ) <Statement>   fi" << endl;
               return true;
             }
@@ -501,14 +544,17 @@ bool R(){
       }
     }
   }
-  else if(Lexer() == "keyword" && keyword == "if"){
-    if(Lexer() == "seperator" && ch == '('){
+
+  SetTokenCounter(counter);
+
+  if(GetNextToken()[0] == "keyword" && GetToken()[1] == "if"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if(W()){
-        if(Lexer() == "seperator" && ch == ')'){
+        if(GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
           if(O()){
-            if(Lexer() == "keyword" && keyword == "otherwise"){
+            if(GetNextToken()[0] == "keyword" && GetToken()[1] == "otherwise"){
               if(O()){
-                if(Lexer() == "keyword" && keyword == "fi"){
+                if(GetNextToken()[0] == "keyword" && GetToken()[1] == "fi"){
                   cout << "if  ( <Condition>  ) <Statement>   otherwise  <Statement>  fi " << endl;
                   return true;
                 }
@@ -523,28 +569,30 @@ bool R(){
 }
 ///////////////////////////////////////
 bool S(){
-  if(Lexer() == "keyword" && keyword == "return"){
-    if (Lexer() == "seperator" && ch == ';'){
-      cout << "return ; "<< endl;
-      return true;
-    }
-  }
-  else if (Lexer() == "keyword" && keyword == "return"){
-    if(Y()){
-      if (Lexer() == "seperator" && ch == ';'){
-        cout << "return <Expression> ;"<<endl;
-        return true;
-      }
-    }
-  }
+	if (GetNextToken()[0] == "keyword" && GetToken()[1] == "return") {
+		int counter = GetTokenCounter();
+		if (Y()) {
+			if (GetNextToken()[0] == "seperator" && GetToken()[1] == ";") {
+				cout << "return <Expression> ;" << endl;
+				return true;
+			}
+		}
+
+		SetTokenCounter(counter);
+
+		if (GetNextToken()[0] == "seperator" && GetToken()[1] == ";") {
+			cout << "return <Expression> ;" << endl;
+			return true;
+		}
+	}
   return false;
 }
 ///////////////////////////////////////
 bool T(){
-  if(Lexer() == "keyword" && keyword == "put"){
-    if(Lexer() == "seperator" && ch == '('){
+  if(GetNextToken()[0] == "keyword" && GetToken()[1] == "put"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (Y()){
-        if (Lexer() == "seperator" && ch == ')'){
+        if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
           cout << "put ( <Expression>);" << endl;
           return true;
         }
@@ -555,10 +603,10 @@ bool T(){
 }
 ///////////////////////////////////////
 bool U(){
-  if(Lexer() == "keyword" && keyword == "get"){
-    if(Lexer() == "seperator" && ch == '('){
+  if(GetNextToken()[0] == "keyword" && GetToken()[1] == "get"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (M()){
-        if (Lexer() == "seperator" && ch == ')'){
+        if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
           cout << "get ( <IDs> );" << endl;
           return true;
         }
@@ -569,10 +617,10 @@ bool U(){
 }
 ///////////////////////////////////////
 bool V(){
-  if(Lexer() == "keyword" && keyword == "while"){
-    if(Lexer() == "seperator" && ch == '('){
+  if(GetNextToken()[0] == "keyword" && GetToken()[1] == "while"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (W()){
-        if (Lexer() == "seperator" && ch == ')'){
+        if (GetNextToken()[0] == "seperator" && ch == ')'){
           if(O()){
             cout << "<While> ::=  while ( <Condition> ) <Statement>" << endl;
             return true;
@@ -597,9 +645,7 @@ bool W(){
 }
 ///////////////////////////////////////
 bool X(){
-  ch3 = ch + ch2;
-  if (Lexer() == "operator" && ch3 == "=="){
-
+  if (GetNextToken()[0] == "operator" && (GetToken()[1] == "==" || GetToken()[1] == "/=" || GetToken()[1] == ">=" || GetToken()[1] == "<=" || GetToken()[1] == ">" || GetToken()[1] == "<")){
     return true;
   }
   return false;
@@ -615,24 +661,28 @@ bool Y(){
 }
 ///////////////////////////////////////
 bool YPrime(){
-  if (Lexer() == "operator" && ch == '+'){
+  int counter = GetTokenCounter();
+
+  if (GetNextToken()[0] == "operator" && GetToken()[1] == "+"){
     if(Z()){
       if(YPrime()){
         return true;
       }
     }
   }
-  else if (Lexer() == "operator" && ch == '-'){
+
+  SetTokenCounter(counter);
+
+  if (GetNextToken()[0] == "operator" && GetToken()[1] == "-"){
     if(Z()){
       if(YPrime()){
         return true;
       }
     }
   }
-  else{
-    CC();
-  }
-  return false;
+
+  SetTokenCounter(counter);
+  return true;
 }
 ///////////////////////////////////////
 bool Z(){
@@ -645,75 +695,98 @@ bool Z(){
 }
 ///////////////////////////////////////
 bool ZPrime(){
-  if(Lexer() == "operator" && ch == '*'){
+	int counter = GetTokenCounter();
+
+  if(GetNextToken()[0] == "operator" && GetToken()[1] == "*"){
     if(AA()){
       if(ZPrime()){
         return true;
       }
     }
   }
-  else if(Lexer() == "operator" && ch == '/'){
+
+  SetTokenCounter(counter);
+
+  if(GetNextToken()[0] == "operator" && GetToken()[1] == "/"){
     if(AA()){
       if(ZPrime()){
         return true;
       }
     }
   }
-  else{
-    CC();
-  }
-  return false;
+
+  SetTokenCounter(counter);
+  return true;
 }
 ///////////////////////////////////////
 bool AA(){
-  if(Lexer() == "operator" && ch == '-'){
+  int counter = GetTokenCounter();
+
+  if(GetNextToken()[0] == "operator" && GetToken()[1] == "-"){
     if(BB()){
       return true;
     }
   }
-  else if (BB()){
+
+  SetTokenCounter(counter);
+
+  if (BB()){
     return true;
   }
   return false;
 }
 ///////////////////////////////////////
 bool BB(){
-  if(Lexer() == "identifier"){
+  int counter = GetTokenCounter();
+  
+  if(GetNextToken()[0] == "identifier"){
     return true;
   }
-  else if(Lexer() == "integer"){
+
+  SetTokenCounter(counter);
+
+  if(GetNextToken()[0] == "integer"){
     return true;
   }
-  else if(Lexer() == "identifier"){
-    if(Lexer() == "seperator" && ch == '('){
+
+  SetTokenCounter(counter);
+
+  if(GetNextToken()[0] == "identifier"){
+    if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (M()){
-        if (Lexer() == "seperator" && ch == ')'){
+        if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
           return true;
         }
       }
     }
   }
-  else if(Lexer() == "seperator" && ch == '('){
+
+  SetTokenCounter(counter);
+
+  if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
     if (Y()){
-      if (Lexer() == "seperator" && ch == ')'){
+      if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
         return true;
       }
     }
   }
-  else if(Lexer() == "real"){
+
+  SetTokenCounter(counter);
+
+  if(GetNextToken()[0] == "real"){
     return true;
   }
-  else if(Lexer() == "keyword" && (keyword == "true" || keyword == "false")){
+
+  SetTokenCounter(counter);
+
+  if(GetNextToken()[0] == "keyword" && (GetToken()[1] == "true" || GetToken()[1] == "false")){
     return true;
   }
   return false;
 }
 ///////////////////////////////////////
-void CC(){
-  LexerDone();
-}
-///////////////////////////////////////
 int main(){
+	Lexer();
   if(APrime()){
     cout << "Parsing complete.";
   }
