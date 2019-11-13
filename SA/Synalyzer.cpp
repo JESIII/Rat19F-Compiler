@@ -7,8 +7,25 @@
 #include <vector>
 #include <cstring>
 using namespace std;
+class input{
+public:
+  string token;
+  string lexeme;
+	size_t lineNumber;
+	input(string tok, string lex, size_t line){
+		token = tok;
+		lexeme = lex;
+		lineNumber = line;
+	}
+  string gettoken(){
+    return this->token;
+  }
+  string getlexeme(){
+    return this->lexeme;
+  }
+};
 ofstream fout("output.txt");
-ifstream fin("C:/Users/winds/Desktop/Rat19F-Compiler-master/Lexer/Test-Cases/sample.rat19");
+ifstream fin("C:/Users/tinco/Dropbox (CSU Fullerton)/323/Rat19F-Compiler/Lexer/Test-Cases/sample.rat19");
 char ch2;
 char ch;
 string ch3;
