@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <string>
 #include <vector>
+#include <cstring>
 using namespace std;
 ofstream fout("output.txt");
 ifstream fin("C:/Users/winds/Desktop/Rat19F-Compiler-master/Lexer/Test-Cases/sample.rat19");
@@ -68,7 +69,6 @@ bool in_array(char key, char* arr, int size) {
 // Function to check if a number integer or a real number
 //=========================================================================
 string getNumOrReal(char number) {
-
 	//====================================================================
 	//Finite state machine that can tell if int or real number or invalid
 	// States:
@@ -484,7 +484,7 @@ bool O(){
     fout << "<Assign>   "<<endl;
     return true;
   }
-  
+
   SetTokenCounter(counter);
 
   if(R()){
@@ -776,7 +776,7 @@ bool BB(){
   }
 
   SetTokenCounter(counter);
-  
+
   if(GetNextToken()[0] == "identifier"){
     return true;
   }
