@@ -1,17 +1,15 @@
 function gt (one int, two int)
 {
-  if ( one >= two )
   return true;
-  otherwise
-  return false;
-  fi
+
+}
+function subtract (one int, two int)
+{
+           return one - two;
 }
 %%
 int one, two;
 get(one,two);
-if (gt(one, two))
-return true;
-otherwise
-return false;
-fi
+result = subtract(n, m);
+
 %%

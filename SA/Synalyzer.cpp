@@ -4,10 +4,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string>
+#include <cstring>
 #include <vector>
 using namespace std;
-ofstream fout("output.txt");
-ifstream fin("C:/Users/winds/Desktop/Rat19F-Compiler-master/Lexer/Test-Cases/sample.rat19");
+ofstream fout("./output.txt");
+ifstream fin("../Lexer/Test-Cases/sample.rat19");
 char ch2;
 char ch;
 string ch3;
@@ -253,10 +254,11 @@ void Lexer() {
 	}
 	//fout.close();
   //fin.close();
-	fout << "LEXER COMPLETE!" << endl;
+
   for (unsigned int i = 0; i < tokens.size(); i++) {
-	  fout << tokens.at(i)[0] << ": " << tokens.at(i)[1] << endl;
+	  fout << "Token: "<< tokens.at(i)[0] << "        Lexeme: " << tokens.at(i)[1] << endl;
   }
+	fout << "LEXER COMPLETE!" << endl;
   return;
 }
 void LexerDone(){
@@ -484,7 +486,7 @@ bool O(){
     fout << "<Statement> ::= <Assign>"<<endl;
     return true;
   }
-  
+
   SetTokenCounter(counter);
 
   if(R()){
@@ -672,7 +674,7 @@ bool W(){
 ///////////////////////////////////////
 bool X(){
   if (GetNextToken()[0] == "operator" && (GetToken()[1] == "==" || GetToken()[1] == "/=" || GetToken()[1] == ">=" || GetToken()[1] == "<=" || GetToken()[1] == ">" || GetToken()[1] == "<")){
-	  fout << " <Relop> ::= == | /= | > | < |  => | <=" << endl;
+	  fout << "<Relop> ::= == | /= | > | < |  => | <=" << endl;
     return true;
   }
   return false;
@@ -786,7 +788,7 @@ bool BB(){
   }
 
   SetTokenCounter(counter);
-  
+
   if(GetNextToken()[0] == "identifier"){
 	  fout << "<Primary> ::= <Identifier>" << endl;
     return true;

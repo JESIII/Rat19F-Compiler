@@ -1,6 +1,4 @@
-[*
-This is the second test case for the rat19f compiler Hopefully it works
-*]
+
 function add (one int, two int)
 {
            return one + two;
@@ -11,11 +9,11 @@ function subtract (one int, two int)
 }
 function gt (one int, two int)
 {
-  if ( one >= two )
-  return true;
-  otherwise
-  return false;
-  fi
+while (low  <=  high )
+    {  put (low);
+        put (convert1x (low));
+        low =  low  +  step;
+    }
 }
 %%
 int n, m, result;
