@@ -53,7 +53,12 @@ bool C();
 bool B();
 bool A();
 bool APrime();
-
+class ASM_Operation{
+	size_t address;
+	string op;
+	string oprnd;
+};
+vector<ASM_Operation> instr_table;
 //=========================================================================
 // Function to check if a key value matches a value in an array
 //=========================================================================
@@ -223,7 +228,7 @@ void Lexer() {
 			}
 			else if (ch2 == '*') { //handles [*
 				char seeker = fin.get();
-				while(seeker != '*'){
+				while(seeker != '}'){
 					fin.get(seeker);
 				}
 				fin.unget();
