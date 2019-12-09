@@ -92,8 +92,8 @@ LEXER COMPLETE!
 <Statement List> ::= <Statement>
 <Body>  ::=  {  < Statement List>  }
 <Function> ::= function  <Identifier>   ( <Opt Parameter List> )  <Opt Declaration List>  <Body>
-<Function Definitions>  ::= <Function> 
-<Opt Function Definitions> ::= <Function Definitions> 
+<Function Definitions>  ::= <Function>
+<Opt Function Definitions> ::= <Function Definitions>
 <Qualifier> ::= int
 <IDs> ::= <Identifier>
 <IDs> ::= <Identifier> , <IDs>
@@ -142,7 +142,7 @@ LEXER COMPLETE!
 <Statement List> ::= <Statement>
 <Statement List> ::= <Statement> <Statement List>
 <Statement List> ::= <Statement> <Statement List>
-<Compound> ::= {  <Statement List>  } 
+<Compound> ::= {  <Statement List>  }
 <Statement> ::= <Compound>
 <While> ::=  while ( <Condition> ) <Statement>
 <Statement> ::= <While>

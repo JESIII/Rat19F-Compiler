@@ -228,11 +228,11 @@ void Lexer() {
 			}
 			else if (ch2 == '*') { //handles [*
 				char seeker = fin.get();
-				while(seeker != '}'){
+				while(seeker != ']'){
 					fin.get(seeker);
 				}
-				fin.unget();
-				tokens.push_back(vector<string>{ "seperator", string() + ch + ch2 });
+				//fin.unget();
+				//tokens.push_back(vector<string>{ "seperator", string() + ch + ch2 });
 			}
 			else if (ch == '*'){ //Since * can be an operator or beginning of sep, we need this to handle it being an op.
 				tokens.push_back(vector<string>{ "operator", string() + ch });
