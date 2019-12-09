@@ -1,0 +1,38 @@
+
+//arbitrary values
+const int rINT = 0, r//what other types are there
+
+class storeSymbol{
+	string name;
+	int memaddr;
+	int type;//?
+//initialize class
+storeSymbol(
+};
+
+vector<storeSymbol> symtabl;
+
+//table can be global so axe the reference
+int symCheck(storeSymbol symb, bool initl, etc)
+{
+if (initl)
+ {
+ for (int i = 0; i < symtabl.size();i++)
+  {
+   if (symtabl[i].name == symb)
+    { return -1;}
+  }
+ storeSymbol bep(
+ return bep.memaddr;
+
+
+//else:
+//if not in return error
+int bap = -2;
+for (thing in symtabl)
+ {
+  if (thing == symb.name)
+   {bap = index;}
+ }
+return bap;
+}
