@@ -53,13 +53,24 @@ bool C();
 bool B();
 bool A();
 bool APrime();
+//=========================================================================
+// Class that holds the assembly operations
+//=========================================================================
 class ASM_Operation{
 	public:
 	size_t address;
 	string op;
 	string oprnd;
 };
+//=========================================================================
+// The instruction table
+//=========================================================================
 vector<ASM_Operation> instr_table;
+//=========================================================================
+// The generate instruction tables that makes an ASM_Operation and inserts it into the instr_table
+// the address is the next adderess for the table so if there is an op with addr 5001 it will make the new one 5002
+// if there are no instr in the table it will add with addr 5001
+//=========================================================================
 gen_instr(string operation, size_t address){
 	ASM_Operation newop;
 	newop.address = address;
@@ -82,7 +93,7 @@ bool in_array(char key, char* arr, int size) {
 	}
 	return false;
 }
-//=========================================================================a
+//=========================================================================
 // Function to check if a number integer or a real number
 //=========================================================================
 string getNumOrReal(char number) {
