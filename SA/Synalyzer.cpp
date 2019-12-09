@@ -54,11 +54,23 @@ bool B();
 bool A();
 bool APrime();
 class ASM_Operation{
+	public:
 	size_t address;
 	string op;
 	string oprnd;
 };
 vector<ASM_Operation> instr_table;
+gen_instr(string operation, size_t address){
+	ASM_Operation newop;
+	newop.address = address;
+	newop.op = operation;
+	if (!instr_table.empty()){
+		newop.oprnd = instr_table.back().oprnd+1;
+	}else{
+		newop.oprnd = 5001;
+	}
+	instr_table.push_back(newop);
+}
 //=========================================================================
 // Function to check if a key value matches a value in an array
 //=========================================================================
