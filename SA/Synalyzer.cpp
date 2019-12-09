@@ -8,7 +8,7 @@
 #include <vector>
 using namespace std;
 ofstream fout("./output.txt");
-ifstream fin("../Lexer/Test-Cases/sample.rat19");
+ifstream fin("./Test-Cases/sample.rat19");
 char ch2;
 char ch;
 string ch3;
