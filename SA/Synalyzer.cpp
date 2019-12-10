@@ -72,6 +72,10 @@ vector<ASM_Operation> instr_table;
 // the address is the next adderess for the table so if there is an op with addr 5001 it will make the new one 5002
 // if there are no instr in the table it will add with addr 5001
 //=========================================================================
+size_t get_address(string id){
+	//cout << instr_table.size()+1<<endl;
+	return instr_table.size()+1;
+}
 void gen_instr(string operation, size_t address){
 	ASM_Operation newop;
 	newop.address = address;
@@ -80,10 +84,16 @@ void gen_instr(string operation, size_t address){
 
 	instr_table.push_back(newop);
 }
-size_t get_address(string id){
-	//cout << instr_table.size()+1<<endl;
-	return instr_table.size()+1;
+//THIS NEEDS TO HANDLE nil address for operation instead of push/pops
+void gen_instr(string operation, string address){
+	ASM_Operation newop;
+	newop.address = get_address(address);
+	newop.op = operation;
+	//newop.oprnd = address;
+
+	instr_table.push_back(newop);
 }
+
 //=========================================================================
 // Function to check if a key value matches a value in an array
 //=========================================================================
@@ -479,7 +489,7 @@ bool M(){
 	  else {
 		  fout << "<IDs> ::= <Identifier>" << endl;
 		  SetTokenCounter(counter);
-			gen_instr("POPM",get_address(GetToken()[1])); //we need to add these in the appropriate places//
+			gen_instr("PUSHM",  get_address(GetToken()[1])); //we need to add these in the appropriate places//
 		  return true;
 	  }
   }
@@ -573,6 +583,7 @@ bool Q(){
     if(GetNextToken()[0] == "operator" && GetToken()[1] == "="){
       if(Y()){
         if(GetNextToken()[0] == "seperator" && GetToken()[1] == ";"){
+					gen_instr("POPM",get_address(GetToken()[1]));
           fout << "<Assign> ::= <Identifier> = <Expression> ;" << endl;
           return true;
         }
@@ -724,9 +735,11 @@ bool YPrime(){
   int counter = GetTokenCounter();
 
   if (GetNextToken()[0] == "operator" && GetToken()[1] == "+"){
+
     if(Z()){
       if(YPrime()){
-		fout << "<Expression> ::= <Expression> + <Term>" << endl;
+				gen_instr("ADD", "nil");
+				fout << "<Expression> ::= <Expression> + <Term>" << endl;
         return true;
       }
     }
@@ -761,9 +774,11 @@ bool ZPrime(){
 	int counter = GetTokenCounter();
 
   if(GetNextToken()[0] == "operator" && GetToken()[1] == "*"){
+
     if(AA()){
       if(ZPrime()){
-		fout << "<Term> ::= <Term>  *  <Factor>" << endl;
+				fout << "<Term> ::= <Term>  *  <Factor>" << endl;
+				gen_instr("MUL", "nil");
         return true;
       }
     }
@@ -872,10 +887,12 @@ int main(){
 	cout<<setw(10);
 	cout<<"oprd"<<endl;
 	for(auto i : instr_table){
+
 		cout << i.address;
 		cout<<setw(10);
 		cout<< i.op ;
 		cout<<setw(8);
-		cout<< i.oprnd<<endl;
+		if(i.oprnd>7000)cout<<"nil\n";
+		else{cout<< i.oprnd<<endl;}
 	}
 }
