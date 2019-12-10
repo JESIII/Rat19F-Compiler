@@ -1,3 +1,6 @@
+final no ch six, up to ch 7
+
+
 
 //arbitrary values
 const int rINT = 0, r//what other types are there
@@ -7,13 +10,20 @@ class storeSymbol{
 	int memaddr;
 	int type;//?
 //initialize class
-storeSymbol(
+storeSymbol(string nm, int memr, int ty);
 };
+
+storeSymbol::storeSymbol(string nm, int memr, int ty)
+{
+	name = nm;
+	memaddr = memr;
+	type = ty;
+}
 
 vector<storeSymbol> symtabl;
 
 //table can be global so axe the reference
-int symCheck(storeSymbol symb, bool initl, etc)
+int symCheck(string symb, bool initl, int type, etc)
 {
 if (initl)
  {
@@ -22,7 +32,7 @@ if (initl)
    if (symtabl[i].name == symb)
     { return -1;}
   }
- storeSymbol bep(
+ storeSymbol bep(symb,b,type);
  return bep.memaddr;
 
 
