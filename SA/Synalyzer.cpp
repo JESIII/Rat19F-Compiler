@@ -6,6 +6,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <iomanip>
 using namespace std;
 ofstream fout("./output.txt");
 ifstream fin("./Test-Cases/sample.rat19");
@@ -60,7 +61,7 @@ class ASM_Operation{
 	public:
 	size_t address;
 	string op;
-	string oprnd;
+	size_t oprnd;
 };
 //=========================================================================
 // The instruction table
@@ -71,16 +72,17 @@ vector<ASM_Operation> instr_table;
 // the address is the next adderess for the table so if there is an op with addr 5001 it will make the new one 5002
 // if there are no instr in the table it will add with addr 5001
 //=========================================================================
-gen_instr(string operation, size_t address){
+void gen_instr(string operation, size_t address){
 	ASM_Operation newop;
 	newop.address = address;
 	newop.op = operation;
-	if (!instr_table.empty()){
-		newop.oprnd = instr_table.back().oprnd+1;
-	}else{
-		newop.oprnd = 5001;
-	}
+	newop.oprnd = address+5000;
+
 	instr_table.push_back(newop);
+}
+size_t get_address(string id){
+	//cout << instr_table.size()+1<<endl;
+	return instr_table.size()+1;
 }
 //=========================================================================
 // Function to check if a key value matches a value in an array
@@ -477,6 +479,7 @@ bool M(){
 	  else {
 		  fout << "<IDs> ::= <Identifier>" << endl;
 		  SetTokenCounter(counter);
+			gen_instr("POPM",get_address(GetToken()[1])); //we need to add these in the appropriate places//
 		  return true;
 	  }
   }
@@ -861,4 +864,18 @@ int main(){
   if(APrime()){
     fout << "Parsing complete.";
   }
+	//print out instruction table...
+	cout<<"instr table\n";
+	cout << "add";
+	cout << setw(6);
+	cout<< "op";
+	cout<<setw(10);
+	cout<<"oprd"<<endl;
+	for(auto i : instr_table){
+		cout << i.address;
+		cout<<setw(10);
+		cout<< i.op ;
+		cout<<setw(8);
+		cout<< i.oprnd<<endl;
+	}
 }
