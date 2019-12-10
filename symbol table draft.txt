@@ -1,29 +1,5 @@
-final no ch six, up to ch 7
 
-
-
-//arbitrary values
-const int rINT = 0, r//what other types are there
-
-class storeSymbol{
-	string name;
-	int memaddr;
-	int type;//?
-//initialize class
-storeSymbol(string nm, int memr, int ty);
-};
-
-storeSymbol::storeSymbol(string nm, int memr, int ty)
-{
-	name = nm;
-	memaddr = memr;
-	type = ty;
-}
-
-vector<storeSymbol> symtabl;
-
-//table can be global so axe the reference
-int symCheck(string symb, bool initl, int type, etc)
+int symCheck(string symb, size_t addr, bool initl, int type, etc)
 {
 if (initl)
  {
