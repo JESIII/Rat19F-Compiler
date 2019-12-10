@@ -57,6 +57,7 @@ bool APrime();
 //=========================================================================
 // Class that holds the assembly operations
 //=========================================================================
+size_t instr_address = 0;
 class ASM_Operation{
 	public:
 	size_t address;
@@ -78,9 +79,10 @@ size_t get_address(string id){
 }
 void gen_instr(string operation, size_t address){
 	ASM_Operation newop;
-	newop.address = address;
+	newop.address = instr_address;
 	newop.op = operation;
-	newop.oprnd = address+5000;
+	newop.oprnd = instr_address+5000;
+	instr_address++;
 	instr_table.push_back(newop);
 }
 //THIS NEEDS TO HANDLE nil address for operation instead of push/pops
@@ -92,10 +94,14 @@ void gen_instr(string operation, string address){
 
 	instr_table.push_back(newop);
 }
+size_t pop_jumpstack(){
+	return 0;
+}
 void back_patch(size_t jump_addr){
 	size_t addr = pop_jumpstack();//pop_jumpstack needs definition
 	instr_table[addr].oprnd = jump_addr;
 }
+
 //=========================================================================
 // Function to check if a key value matches a value in an array
 //=========================================================================
@@ -882,12 +888,14 @@ int main(){
     fout << "Parsing complete.";
   }
 	//print out instruction table...
-	cout<<"instr table\n";
-	cout << "add";
-	cout << setw(6);
+	cout<<"============\n";
+	cout<<"Instr Table\n";
+	cout<<"============\n";
+	cout << "addr";
+	cout << setw(4);
 	cout<< "op";
-	cout<<setw(10);
-	cout<<"oprd"<<endl;
+	cout<<setw(11);
+	cout<<"oprnd"<<endl;
 	for(auto i : instr_table){
 
 		cout << i.address;

@@ -1,18 +1,126 @@
 Token: seperator        Lexeme: %%
-Token: identifier        Lexeme: a
+Token: keyword        Lexeme: int
+Token: identifier        Lexeme: i
+Token: seperator        Lexeme: ,
+Token: identifier        Lexeme: max
+Token: seperator        Lexeme: ,
+Token: identifier        Lexeme: sum
+Token: seperator        Lexeme: ;
+Token: identifier        Lexeme: sum
 Token: operator        Lexeme: =
 Token: integer        Lexeme: 0
+Token: seperator        Lexeme: ;
+Token: identifier        Lexeme: i
+Token: operator        Lexeme: =
+Token: integer        Lexeme: 1
+Token: seperator        Lexeme: ;
+Token: keyword        Lexeme: get
+Token: seperator        Lexeme: (
+Token: identifier        Lexeme: max
+Token: seperator        Lexeme: )
+Token: seperator        Lexeme: ;
+Token: keyword        Lexeme: while
+Token: seperator        Lexeme: (
+Token: identifier        Lexeme: i
+Token: operator        Lexeme: <
+Token: identifier        Lexeme: max
+Token: seperator        Lexeme: )
+Token: seperator        Lexeme: {
+Token: identifier        Lexeme: sum
+Token: operator        Lexeme: =
+Token: identifier        Lexeme: sum
+Token: operator        Lexeme: +
+Token: identifier        Lexeme: i
+Token: seperator        Lexeme: ;
+Token: identifier        Lexeme: i
+Token: operator        Lexeme: =
+Token: identifier        Lexeme: i
+Token: operator        Lexeme: +
+Token: integer        Lexeme: 1
+Token: seperator        Lexeme: ;
+Token: seperator        Lexeme: }
+Token: keyword        Lexeme: put
+Token: seperator        Lexeme: (
+Token: identifier        Lexeme: sum
+Token: operator        Lexeme: +
+Token: identifier        Lexeme: max
+Token: seperator        Lexeme: )
 Token: seperator        Lexeme: ;
 Token: seperator        Lexeme: %%
 LEXER COMPLETE!
 <Opt Function Definitions> ::= <Empty> 
-<Opt Declaration List> ::= <Empty>
+<Qualifier> ::= int
+<IDs> ::= <Identifier>
+<IDs> ::= <Identifier> , <IDs>
+<IDs> ::= <Identifier> , <IDs>
+<Declaration> ::=   <Qualifier > <IDs>
+<Declaration List>  := <Declaration> ;
+<Opt Declaration List> ::= <Declaration List>
 <Primary> ::= <Integer>
 <Factor> ::= <Primary>
 <Term> ::= <Factor>
 <Expression> ::= <Term>
 <Assign> ::= <Identifier> = <Expression> ;
 <Statement> ::= <Assign>
+<Primary> ::= <Integer>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Expression> ::= <Term>
+<Assign> ::= <Identifier> = <Expression> ;
+<Statement> ::= <Assign>
+<IDs> ::= <Identifier>
+<Scan> ::= get ( <IDs> ) ;
+<Statement> ::= <Scan>
+<Primary> ::= <Identifier>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Expression> ::= <Term>
+<Relop> ::= == | /= | > | < |  => | <=
+<Primary> ::= <Identifier>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Expression> ::= <Term>
+<Condition> ::= <Expression> <Relop> <Expression>
+<Primary> ::= <Identifier>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Primary> ::= <Identifier>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Expression> ::= <Term>
+<Expression> ::= <Expression> + <Term>
+<Assign> ::= <Identifier> = <Expression> ;
+<Statement> ::= <Assign>
+<Primary> ::= <Identifier>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Primary> ::= <Integer>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Expression> ::= <Term>
+<Expression> ::= <Expression> + <Term>
+<Assign> ::= <Identifier> = <Expression> ;
+<Statement> ::= <Assign>
 <Statement List> ::= <Statement>
+<Statement List> ::= <Statement> <Statement List>
+<Compound> ::= {  <Statement List>  } 
+<Statement> ::= <Compound>
+<While> ::=  while ( <Condition> ) <Statement>
+<Statement> ::= <While>
+<Primary> ::= <Identifier>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Primary> ::= <Identifier>
+<Factor> ::= <Primary>
+<Term> ::= <Factor>
+<Expression> ::= <Term>
+<Expression> ::= <Expression> + <Term>
+<Print> ::= put ( <Expression> ) ;
+<Statement> ::= <Print>
+<Statement List> ::= <Statement>
+<Statement List> ::= <Statement> <Statement List>
+<Statement List> ::= <Statement> <Statement List>
+<Statement List> ::= <Statement> <Statement List>
+<Statement List> ::= <Statement> <Statement List>
 <Rat19F>  ::=   <Opt Function Definitions>   %%  <Opt Declaration List>  <Statement List>  %%
 Parsing complete.
