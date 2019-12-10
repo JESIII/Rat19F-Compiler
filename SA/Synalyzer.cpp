@@ -74,14 +74,13 @@ vector<ASM_Operation> instr_table;
 //=========================================================================
 size_t get_address(string id){
 	//cout << instr_table.size()+1<<endl;
-	return instr_table.size()+1;
+	return instr_table.size();
 }
 void gen_instr(string operation, size_t address){
 	ASM_Operation newop;
 	newop.address = address;
 	newop.op = operation;
 	newop.oprnd = address+5000;
-
 	instr_table.push_back(newop);
 }
 //THIS NEEDS TO HANDLE nil address for operation instead of push/pops
@@ -440,7 +439,6 @@ bool I(){
 ///////////////////////////////////////
 bool J(){
   int counter = GetTokenCounter();
-
   if(K()){
 	fout << "<Opt Declaration List> ::= <Declaration List>" << endl;
     return true;
@@ -472,7 +470,7 @@ bool K(){
 bool L(){
   if(H()){
     if(M()){
-	  fout << "<Declaration> ::=   <Qualifier > <IDs>" << endl;
+	  	fout << "<Declaration> ::=   <Qualifier > <IDs>" << endl;
       return true;
     }
   }
@@ -659,10 +657,10 @@ bool T(){
     if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (Y()){
         if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
-			if (GetNextToken()[0] == "seperator" && GetToken()[1] == ";") {
-				fout << "<Print> ::= put ( <Expression> ) ;" << endl;
-				return true;
-			}
+					if (GetNextToken()[0] == "seperator" && GetToken()[1] == ";") {
+						fout << "<Print> ::= put ( <Expression> ) ;" << endl;
+						return true;
+					}
         }
       }
     }
@@ -675,9 +673,9 @@ bool U(){
     if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (M()){
         if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
-			if (GetNextToken()[0] == "seperator" && GetToken()[1] == ";") {
-				fout << "<Scan> ::= get ( <IDs> ) ;" << endl;
-			}
+					if (GetNextToken()[0] == "seperator" && GetToken()[1] == ";") {
+						fout << "<Scan> ::= get ( <IDs> ) ;" << endl;
+					}
           return true;
         }
       }
@@ -750,7 +748,7 @@ bool YPrime(){
   if (GetNextToken()[0] == "operator" && GetToken()[1] == "-"){
     if(Z()){
       if(YPrime()){
-		fout << "<Expression> ::= <Expression> - <Term>" << endl;
+				fout << "<Expression> ::= <Expression> - <Term>" << endl;
         return true;
       }
     }
@@ -772,9 +770,7 @@ bool Z(){
 ///////////////////////////////////////
 bool ZPrime(){
 	int counter = GetTokenCounter();
-
   if(GetNextToken()[0] == "operator" && GetToken()[1] == "*"){
-
     if(AA()){
       if(ZPrime()){
 				fout << "<Term> ::= <Term>  *  <Factor>" << endl;
@@ -789,7 +785,7 @@ bool ZPrime(){
   if(GetNextToken()[0] == "operator" && GetToken()[1] == "/"){
     if(AA()){
       if(ZPrime()){
-		fout << "<Term> ::= <Term>  /  <Factor>" << endl;
+				fout << "<Term> ::= <Term>  /  <Factor>" << endl;
         return true;
       }
     }
@@ -805,7 +801,7 @@ bool AA(){
 
   if(GetNextToken()[0] == "operator" && GetToken()[1] == "-"){
     if(BB()){
-		fout << "<Factor> ::= - <Primary>" << endl;
+			fout << "<Factor> ::= - <Primary>" << endl;
       return true;
     }
   }
@@ -852,7 +848,7 @@ bool BB(){
   if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
     if (Y()){
       if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
-		  fout << "<Primary> ::= ( <Expression> )" << endl;
+		  	fout << "<Primary> ::= ( <Expression> )" << endl;
         return true;
       }
     }
