@@ -92,7 +92,10 @@ void gen_instr(string operation, string address){
 
 	instr_table.push_back(newop);
 }
-
+void back_patch(size_t jump_addr){
+	size_t addr = pop_jumpstack();//pop_jumpstack needs definition
+	instr_table[addr].oprnd = jump_addr;
+}
 //=========================================================================
 // Function to check if a key value matches a value in an array
 //=========================================================================
@@ -686,10 +689,13 @@ bool U(){
 ///////////////////////////////////////
 bool V(){
   if(GetNextToken()[0] == "keyword" && GetToken()[1] == "while"){
+		string addr = GetToken()[1];
+		gen_instr("LABEL", "nil");
     if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (W()){
         if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
           if(O()){
+						gen_instr("JUMP", addr);
             fout << "<While> ::=  while ( <Condition> ) <Statement>" << endl;
             return true;
           }
