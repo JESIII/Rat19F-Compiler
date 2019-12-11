@@ -69,9 +69,9 @@ class ASM_Symbol{
 size_t sym_address = 5000;
 ASM_Symbol sym_table[1000];
 size_t get_address(string id){
-	for(auto i : sym_table){
-		if(i.id == id){
-			return i.address;
+	for(int i = 0; i<sym_address-5000; i++){
+		if(sym_table[i].id == id){
+			return sym_table[i].address;
 		}
 	}
 	return 0;
@@ -83,8 +83,8 @@ size_t get_address(string id){
 // if there are no instr in the table it will add with adddr 5001
 //=========================================================================
 bool insymtable(string id){
-	for(auto i : sym_table){
-		if(i.id == id){
+	for(int i = 0; i<sym_address-5000; i++){
+		if(sym_table[i].id == id){
 			return true;
 		}
 	}
@@ -95,9 +95,9 @@ void gen_sym(string id, string type){
 		cout<<"Error: Double initialization of variable\n";
 		return;
 	}
-	sym_table[sym_address].address = sym_address;
-	sym_table[sym_address].id = id;
-	sym_table[sym_address].type = type;
+	sym_table[sym_address-5000].address = sym_address;
+	sym_table[sym_address-5000].id = id;
+	sym_table[sym_address-5000].type = type;
 	sym_address++;
 }
 
@@ -121,14 +121,14 @@ ASM_Operation instr_table[1000];
 // if there are no instr in the table it will add with addr 5001
 //=========================================================================
 void gen_instr(string operation, size_t oprnd){
-	instr_table[instr_address].address = instr_address;
-	instr_table[instr_address].op = operation;
-	instr_table[instr_address].oprnd = oprnd;
+	instr_table[instr_address-5000].address = instr_address;
+	instr_table[instr_address-5000].op = operation;
+	instr_table[instr_address-5000].oprnd = oprnd;
 	instr_address++;
 }
 void gen_instr(string operation, string oprnd){
-	instr_table[instr_address].address = instr_address;
-	instr_table[instr_address].op = operation;
+	instr_table[instr_address-5000].address = instr_address;
+	instr_table[instr_address-5000].op = operation;
 	//instr_table[instr_address].oprnd = oprnd;
 	instr_address++;
 }
@@ -137,7 +137,7 @@ size_t pop_jumpstack(){
 }
 void back_patch(size_t jump_addr){
 	size_t addr = pop_jumpstack();//pop_jumpstack needs definition
-	instr_table[addr].oprnd = jump_addr;
+	instr_table[addr-5000].oprnd = jump_addr;
 }
 
 //=========================================================================
@@ -945,14 +945,14 @@ int main(){
 	cout<< "op";
 	cout<<setw(11);
 	cout<<"oprnd"<<endl;
-	for(auto i : instr_table){
+	for(int i = 0 ; i<instr_address-5000; i++){
 
-		cout << i.address;
+		cout << instr_table[i].address;
 		cout<<setw(10);
-		cout<< i.op ;
+		cout<< instr_table[i].op ;
 		cout<<setw(8);
-		if(i.oprnd>7000)cout<<"nil\n";
-		else{cout<< i.oprnd<<endl;}
+		if(instr_table[i].oprnd>7000)cout<<"nil\n";
+		else{cout<< instr_table[i].oprnd<<endl;}
 	}
 	cout<<"============\n";
 	cout<<"Symbol Table\n";
@@ -962,18 +962,12 @@ int main(){
 	cout<< "ID";
 	cout<<setw(11);
 	cout<<"Addr"<<endl;
-	for(auto i : sym_table){
-		cout << i.type;
+	for(int i =0; i<sym_address-5000; i++){
+		cout << sym_table[i].type;
 		cout<<setw(10);
-		cout<< i.id ;
+		cout<< sym_table[i].id ;
 		cout<<setw(8);
-		if(i.address>7000)cout<<"nil\n";
-		else{cout<< i.address<<endl;}
-	}
-	for(int i = 0; i<tokens.size();i++){
-		for(int j = 0; j<1; i++){
-			cout << tokens[i][j];
-		}
-		cout <<endl;
+		if(sym_table[i].address>7000)cout<<"nil\n";
+		else{cout<< sym_table[i].address<<endl;}
 	}
 }
