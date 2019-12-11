@@ -55,9 +55,56 @@ bool B();
 bool A();
 bool APrime();
 //=========================================================================
+// Class that holds the symbols
+//=========================================================================
+class ASM_Symbol{
+	public:
+	size_t address;
+	string id;
+	string type;
+};
+//=========================================================================
+// The symbol table
+//=========================================================================
+size_t sym_address = 5000;
+ASM_Symbol sym_table[1000];
+size_t get_address(string id){
+	for(auto i : sym_table){
+		if(i.id == id){
+			return i.address;
+		}
+	}
+	return 0;
+}
+
+//=========================================================================
+// The generate instruction tables that makes an ASM_Operation and inserts it into the instr_table
+// the address is the next addereress for the table so if there is an op with addr 5001 it will make the new one 5002
+// if there are no instr in the table it will add with adddr 5001
+//=========================================================================
+bool insymtable(string id){
+	for(auto i : sym_table){
+		if(i.id == id){
+			return true;
+		}
+	}
+	return false;
+}
+void gen_sym(string id, string type){
+	if(insymtable(id)){
+		cout<<"Error: Double initialization of variable\n";
+		return;
+	}
+	sym_table[sym_address].address = sym_address;
+	sym_table[sym_address].id = id;
+	sym_table[sym_address].type = type;
+	sym_address++;
+}
+
+//=========================================================================
 // Class that holds the assembly operations
 //=========================================================================
-size_t instr_address = 0;
+size_t instr_address = 5000;
 class ASM_Operation{
 	public:
 	size_t address;
@@ -67,32 +114,23 @@ class ASM_Operation{
 //=========================================================================
 // The instruction table
 //=========================================================================
-vector<ASM_Operation> instr_table;
+ASM_Operation instr_table[1000];
 //=========================================================================
 // The generate instruction tables that makes an ASM_Operation and inserts it into the instr_table
 // the address is the next adderess for the table so if there is an op with addr 5001 it will make the new one 5002
 // if there are no instr in the table it will add with addr 5001
 //=========================================================================
-size_t get_address(string id){
-	//cout << instr_table.size()+1<<endl;
-	return instr_table.size();
-}
-void gen_instr(string operation, size_t address){
-	ASM_Operation newop;
-	newop.address = instr_address;
-	newop.op = operation;
-	newop.oprnd = instr_address+5000;
+void gen_instr(string operation, size_t oprnd){
+	instr_table[instr_address].address = instr_address;
+	instr_table[instr_address].op = operation;
+	instr_table[instr_address].oprnd = oprnd;
 	instr_address++;
-	instr_table.push_back(newop);
 }
-//THIS NEEDS TO HANDLE nil address for operation instead of push/pops
-void gen_instr(string operation, string address){
-	ASM_Operation newop;
-	newop.address = get_address(address);
-	newop.op = operation;
-	//newop.oprnd = address;
-
-	instr_table.push_back(newop);
+void gen_instr(string operation, string oprnd){
+	instr_table[instr_address].address = instr_address;
+	instr_table[instr_address].op = operation;
+	//instr_table[instr_address].oprnd = oprnd;
+	instr_address++;
 }
 size_t pop_jumpstack(){
 	return 0;
@@ -300,9 +338,6 @@ void Lexer() {
 			}
 		}
 	}
-	//fout.close();
-  //fin.close();
-
   for (unsigned int i = 0; i < tokens.size(); i++) {
 	  fout << "Token: "<< tokens.at(i)[0] << "        Lexeme: " << tokens.at(i)[1] << endl;
   }
@@ -373,7 +408,7 @@ bool D(){
           if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
             if(J()){
               if(I()){
-				  fout << "<Function> ::= function  <Identifier>   ( <Opt Parameter List> )  <Opt Declaration List>  <Body>" << endl;
+				  			fout << "<Function> ::= function  <Identifier>   ( <Opt Parameter List> )  <Opt Declaration List>  <Body>" << endl;
                 return true;
               }
             }
@@ -495,8 +530,12 @@ bool M(){
 	  }
 	  else {
 		  fout << "<IDs> ::= <Identifier>" << endl;
+			cout << "Line 532\n";
+			gen_sym(tokens.at(counter)[1], tokens.at(counter)[0]);
+			cout << "Line 535\n";
+			gen_instr("PUSHM",  get_address(tokens.at(counter)[1])); //we need to add these in the appropriate places//
+
 		  SetTokenCounter(counter);
-			gen_instr("PUSHM",  get_address(GetToken()[1])); //we need to add these in the appropriate places//
 		  return true;
 	  }
   }
@@ -590,7 +629,9 @@ bool Q(){
     if(GetNextToken()[0] == "operator" && GetToken()[1] == "="){
       if(Y()){
         if(GetNextToken()[0] == "seperator" && GetToken()[1] == ";"){
+					cout << "Line 630\n";
 					gen_instr("POPM",get_address(GetToken()[1]));
+					cout << "Line 632\n";
           fout << "<Assign> ::= <Identifier> = <Expression> ;" << endl;
           return true;
         }
@@ -696,12 +737,16 @@ bool U(){
 bool V(){
   if(GetNextToken()[0] == "keyword" && GetToken()[1] == "while"){
 		string addr = GetToken()[1];
+		cout << "Line 738\n";
 		gen_instr("LABEL", "nil");
+		cout << "Line 740\n";
     if(GetNextToken()[0] == "seperator" && GetToken()[1] == "("){
       if (W()){
         if (GetNextToken()[0] == "seperator" && GetToken()[1] == ")"){
           if(O()){
+						cout << "Line 745\n";
 						gen_instr("JUMP", addr);
+						cout << "Line 747\n";
             fout << "<While> ::=  while ( <Condition> ) <Statement>" << endl;
             return true;
           }
@@ -748,7 +793,9 @@ bool YPrime(){
 
     if(Z()){
       if(YPrime()){
+				cout << "Line 794\n";
 				gen_instr("ADD", "nil");
+				cout << "Line 796\n";
 				fout << "<Expression> ::= <Expression> + <Term>" << endl;
         return true;
       }
@@ -786,7 +833,9 @@ bool ZPrime(){
     if(AA()){
       if(ZPrime()){
 				fout << "<Term> ::= <Term>  *  <Factor>" << endl;
+				cout << "Line 834\n";
 				gen_instr("MUL", "nil");
+				cout << "Line 836\n";
         return true;
       }
     }
@@ -904,5 +953,27 @@ int main(){
 		cout<<setw(8);
 		if(i.oprnd>7000)cout<<"nil\n";
 		else{cout<< i.oprnd<<endl;}
+	}
+	cout<<"============\n";
+	cout<<"Symbol Table\n";
+	cout<<"============\n";
+	cout << "Type";
+	cout << setw(4);
+	cout<< "ID";
+	cout<<setw(11);
+	cout<<"Addr"<<endl;
+	for(auto i : sym_table){
+		cout << i.type;
+		cout<<setw(10);
+		cout<< i.id ;
+		cout<<setw(8);
+		if(i.address>7000)cout<<"nil\n";
+		else{cout<< i.address<<endl;}
+	}
+	for(int i = 0; i<tokens.size();i++){
+		for(int j = 0; j<1; i++){
+			cout << tokens[i][j];
+		}
+		cout <<endl;
 	}
 }
