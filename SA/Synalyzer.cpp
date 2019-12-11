@@ -751,6 +751,7 @@ bool V(){
           if(O()){
 						//cout << "Line 745\n";
 						gen_instr("JUMP", addr);
+						//back_patch(instr_address);
 						//cout << "Line 747\n";
             fout << "<While> ::=  while ( <Condition> ) <Statement>" << endl;
             return true;
@@ -775,8 +776,39 @@ bool W(){
 }
 ///////////////////////////////////////
 bool X(){
-  if (GetNextToken()[0] == "operator" && (GetToken()[1] == "==" || GetToken()[1] == "/=" || GetToken()[1] == ">=" || GetToken()[1] == "<=" || GetToken()[1] == ">" || GetToken()[1] == "<")){
+  if (GetNextToken()[0] == "operator" && (GetToken()[1] == "==" || GetToken()[1] == "/=" || GetToken()[1] == "=>" || GetToken()[1] == "<=" || GetToken()[1] == ">" || GetToken()[1] == "<")){
 	  fout << "<Relop> ::= == | /= | > | < |  => | <=" << endl;
+		string op = tokens[GetTokenCounter()][1];
+		if(op=="<"){
+			gen_instr("LES", "nil");
+			//push_jumpstack(instr_address);
+			gen_instr("JUMPZ", "nil");
+		}
+		else if(op == ">"){
+			gen_instr("GRT", "nil");
+			//push_jumpstack(instr_address);
+			gen_instr("JUMPZ", "nil");
+		}
+		else if(op == "=="){
+			gen_instr("EQU", "nil");
+			//push_jumpstack(instr_address);
+			gen_instr("JUMPZ", "nil");
+		}
+		else if(op == "/="){
+			gen_instr("NEQ", "nil");
+			//push_jumpstack(instr_address);
+			gen_instr("JUMPZ", "nil");
+		}
+		else if(op == "=>"){
+			gen_instr("GEQ", "nil");
+			//push_jumpstack(instr_address);
+			gen_instr("JUMPZ", "nil");
+		}
+		else if(op == "<="){
+			gen_instr("LEQ", "nil");
+			//push_jumpstack(instr_address);
+			gen_instr("JUMPZ", "nil");
+		}
     return true;
   }
   return false;
@@ -956,7 +988,7 @@ int main(){
 		cout<<setw(10);
 		cout<< instr_table[i].op ;
 		cout<<setw(8);
-		if(instr_table[i].oprnd>7000)cout<<"nil\n";
+		if(instr_table[i].oprnd>7000||instr_table[i].oprnd==0)cout<<"nil\n";
 		else{cout<< instr_table[i].oprnd<<endl;}
 	}
 	cout<<"============\n";
