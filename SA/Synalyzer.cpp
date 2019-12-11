@@ -528,6 +528,7 @@ bool M(){
   if(GetNextToken()[0] =="identifier"){
 	  int counter = GetTokenCounter();
 	  if (GetNextToken()[0] == "seperator" && GetToken()[1] == "," && M()) {
+			gen_sym(tokens.at(counter)[1], tokens.at(counter)[0]);
 		  fout << "<IDs> ::= <Identifier> , <IDs>" << endl;
 		  return true;
 	  }
