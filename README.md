@@ -1,3 +1,5 @@
 # Rat19FCompiler
 Compiler for the RAT19F Language.
-Currently Developing : Lexical Analyzer
+Lexical Analyzer Done.
+Syntax Analyzer Done.
+Kind of working : OCG
